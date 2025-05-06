@@ -20,7 +20,7 @@ const [users, setUsers] = useState([]);
       localStorage.setItem("token", res.token);
       localStorage.setItem("email", res.email);
       authProvider.isAuthenticated = true;
-      navigate("/dashboard"); // eller hvor du vil sende dem hen efter login
+      navigate("/"); 
     } catch (err: any) {
       setError(err.message || "Login failed");
     }
@@ -59,7 +59,7 @@ const [users, setUsers] = useState([]);
             </li>
           ))}
         </ul>
-        
+
       <form onSubmit={handleSubmit}>
         <input
           type="text"

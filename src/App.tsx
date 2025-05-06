@@ -1,14 +1,13 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import Login from "./security/Login"; // Importer Login komponenten
-import AuthProvider from "./security/AuthProvider"; // Importer AuthProvider
+import Login from "./security/Login"; 
+import AuthProvider from "./security/AuthProvider"; 
 
 function App() {
   return (
-    <AuthProvider> {/* AuthProvider omkranser din app */}
+    <AuthProvider> 
       <Routes>
         <Route path="/" element={<Login />} />
-        {/* Du kan tilføje flere ruter her */}
       </Routes>
     </AuthProvider>
   );
