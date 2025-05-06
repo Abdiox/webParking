@@ -1,6 +1,8 @@
 import { API_URL } from "../settings";
 import { makeOptions, handleHttpErrors } from "./fetchUtils";
 const USERS_URL = API_URL + "/user";
+const USERSADD_URL = API_URL + "/user/add";
+
 
 
 export interface UserDetails {
@@ -41,5 +43,13 @@ async function getUser(id: number): Promise<UserDetails>{
     .then(handleHttpErrors)
 }
 
+async function addUser(newUser: UserDetails): Promise<UserDetails> {
+    const method = newUser.id ? "PUT" : "POST";
+    const options = makeOptions(method, newUser);
+    const URL = newUser.id ? `${USERSADD_URL}/${newUser.id}` : USERSADD_URL;
+    return fetch(URL, options).then(handleHttpErrors);
+    }
 
-export { getUsers, getUser };
+
+
+export { getUsers, getUser, addUser };

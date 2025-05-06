@@ -80,6 +80,7 @@ const [users, setUsers] = useState([]);
         />
         <br />
         <button type="submit">Log ind</button>
+        <button type="button" onClick={() => navigate("/register")}>Opret bruger</button>
       </form>
       {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
