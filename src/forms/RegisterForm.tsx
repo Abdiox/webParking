@@ -11,8 +11,7 @@ export default function RegisterForm({ user, onChange, onSubmit }: RegisterFormP
   return (
     
     <form onSubmit={onSubmit}>
-              <h2>Registrér ny bruger</h2>
-
+    <h2>Registrér ny bruger</h2>
       <input name="name" placeholder="Navn" value={user.name} onChange={onChange} required />
       <input name="email" type="email" placeholder="Email" value={user.email} onChange={onChange} required />
       <input name="password" type="password" placeholder="Kodeord" value={user.password} onChange={onChange} required />

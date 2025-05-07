@@ -2,6 +2,7 @@ import { API_URL } from "../settings";
 import { makeOptions, handleHttpErrors } from "./fetchUtils";
 const USERS_URL = API_URL + "/user";
 const USERSADD_URL = API_URL + "/user/add";
+const PARKING_URL = API_URL + "./parking"
 
 
 
@@ -17,10 +18,21 @@ export interface UserDetails {
     zipCode: number;
   };
 
+  export interface Parking {
+    id: number | null;
+    pArea: string;
+    plateNumber: string
+    startTime: Date;
+    endTime: Date;
+    User: UserDetails;
+  }
+
 
   let users: Array<UserDetails> = [];
+  let parking: Array<Parking> = [];
 
 
+  /* USERS */
 
 async function getUsers(): Promise<Array<UserDetails>> {
   if (users.length > 0) return [...users];
@@ -50,6 +62,22 @@ async function addUser(newUser: UserDetails): Promise<UserDetails> {
     return fetch(URL, options).then(handleHttpErrors);
     }
 
+  /* PARKING */
+  async function getParkings(): Promise<Array<Parking>> {
+    if (parking.length > 0) return [...parking];
+    try {
+        const res = await fetch(PARKING_URL);
+        if (!res.ok) {
+            throw new Error("Failed to fetch users");
+        }
+        const data: Array<Parking> = await res.json();
+        parking = data;
+        return [...parking];
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+  }
 
-
+  
 export { getUsers, getUser, addUser };
