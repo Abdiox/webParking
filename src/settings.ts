@@ -4,7 +4,6 @@ const URL = isProduction ? import.meta.env.VITE_PROD_API_BASE_URL : import.meta.
 
 const MODE = isProduction ? "Production" : "Development";
 console.info(MODE + " API URL: " + URL);
-// export const API_URL = URL;
 
 
- export const API_URL = URL || "http://localhost:8080";
+ export const API_URL = "http://localhost:8080";

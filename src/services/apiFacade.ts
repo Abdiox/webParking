@@ -2,7 +2,7 @@ import { API_URL } from "../settings";
 import { makeOptions, handleHttpErrors } from "./fetchUtils";
 const USERS_URL = API_URL + "/user";
 const USERSADD_URL = API_URL + "/user/add";
-const PARKING_URL = API_URL + "./parking"
+const PARKING_URL = API_URL + "/parking";
 
 
 
@@ -21,11 +21,13 @@ export interface UserDetails {
   export interface Parking {
     id: number | null;
     pArea: string;
-    plateNumber: string
-    startTime: Date;
-    endTime: Date;
-    User: UserDetails;
+    plateNumber: string;
+    startTime: string; 
+    endTime: string;
+    userId: number;      
+    userName: string;  
   }
+  
 
 
   let users: Array<UserDetails> = [];
@@ -64,20 +66,30 @@ async function addUser(newUser: UserDetails): Promise<UserDetails> {
 
   /* PARKING */
   async function getParkings(): Promise<Array<Parking>> {
-    if (parking.length > 0) return [...parking];
     try {
-        const res = await fetch(PARKING_URL);
-        if (!res.ok) {
-            throw new Error("Failed to fetch users");
-        }
-        const data: Array<Parking> = await res.json();
-        parking = data;
-        return [...parking];
+      const res = await fetch(PARKING_URL);
+      const data = await res.json();
+      console.log("API response:", data);
+      return data;
     } catch (error) {
-        console.error(error);
-        return [];
+      console.error(error);
+      return [];
     }
   }
+  
+
+  async function getParking(id: number): Promise<Parking>{
+    return fetch(PARKING_URL + "/" + id)
+    .then(handleHttpErrors)
+}
+async function addParking(newParking: Parking): Promise<Parking> {
+    const method = newParking.id ? "PUT" : "POST";
+    const options = makeOptions(method, newParking);
+    const URL = newParking.id ? `${PARKING_URL}/${newParking.id}` : PARKING_URL;
+    return fetch(URL, options).then(handleHttpErrors);
+    }
+
+
 
   
-export { getUsers, getUser, addUser };
+export { getUsers, getUser, addUser, getParkings, getParking, addParking };
