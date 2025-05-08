@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getParkings } from "../../services/apiFacade";
-import type { Parking } from "../../services/apiFacade";
+import { getParkings } from "../services/apiFacade";
+import type { Parking } from "../services/apiFacade";
 
 export const Home: React.FC = () => {
   const navigate = useNavigate();
