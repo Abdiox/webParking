@@ -1,49 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import "./NavBar.css"; 
 
-interface NavBarProps {
-}
-
-const NavBar: React.FC<NavBarProps> = () => {
+const NavBar: React.FC = () => {
   const navigate = useNavigate();
-  const [userEmail, setUserEmail] = useState<string | null>(null);
-  const [userId, setUserId] = useState<string | null>(null);
-
-  useEffect(() => {
-    // Hent brugeroplysninger fra localStorage
-    const email = localStorage.getItem("email");
-    const id = localStorage.getItem("userId");
-    
-    setUserEmail(email);
-    setUserId(id);
-  }, []);
-
+  
   const handleLogout = () => {
-    // Ryd brugerdata fra localStorage
-    localStorage.removeItem("token");
-    localStorage.removeItem("email");
-    localStorage.removeItem("userId");
+    localStorage.clear();
     
-    // Naviger til login siden
     navigate("/login");
   };
 
   return (
     <div className="navbar-container">
-      {/* Top bar med brugerinfo */}
       <div className="topbar">
-        {userEmail ? (
-          <div className="user-info">
-            <span className="user-email">{userEmail}</span>
-            <span className="user-id">ID: {userId}</span>
-          </div>
-        ) : (
-          <div>Ikke logget ind</div>
-        )}
+        <div className="app-title-small">ParkeringsApp</div>
       </div>
 
-      {/* Side navigation */}
       <div className="sidebar">
         <div className="app-title">
           <h2>ParkeringsApp</h2>
@@ -59,7 +32,7 @@ const NavBar: React.FC<NavBarProps> = () => {
           </NavLink>
           
           <NavLink 
-            to="/parkings" 
+            to="/home" 
             className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
           >
             <i className="icon">🅿️</i>
@@ -67,7 +40,7 @@ const NavBar: React.FC<NavBarProps> = () => {
           </NavLink>
           
           <NavLink 
-            to="/new-parking" 
+            to="/parking" 
             className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
           >
             <i className="icon">➕</i>
