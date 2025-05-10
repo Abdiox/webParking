@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { addParking} from "../services/apiFacade";
 import type { Parking } from "../services/apiFacade";
-import RegistrationForm from "../forms/ParkingForm";
-
+import ParkingForm from "../forms/ParkingForm";
 
 const EMPTY_PARKING: Parking = {
     id: null,
@@ -58,7 +57,7 @@ export default function Parking() {
 
     return (
         <div>
-        <RegistrationForm parking={parking} onChange={handleChange} onSubmit={handleSubmit} />
+        <ParkingForm parking={parking} onChange={handleChange} onSubmit={handleSubmit} />
         </div>
     );
 

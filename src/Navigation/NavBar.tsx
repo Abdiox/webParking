@@ -7,13 +7,13 @@ const NavBar: React.FC = () => {
   
   const handleLogout = () => {
     localStorage.clear();
-    
     navigate("/login");
   };
 
   return (
     <div className="navbar-container">
       <div className="topbar">
+      
         <div className="app-title-small">ParkeringsApp</div>
       </div>
 
