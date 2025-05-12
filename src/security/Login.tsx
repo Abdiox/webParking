@@ -41,7 +41,8 @@ const Login: React.FC = () => {
       }
       
       authProvider.isAuthenticated = true;
-      navigate("/home");
+      window.location.href = "/home";
+      
     } catch (err: any) {
       setError(err.message || "Login failed");
     }

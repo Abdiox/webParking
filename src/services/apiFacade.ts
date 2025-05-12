@@ -3,6 +3,8 @@ import { makeOptions, handleHttpErrors } from "./fetchUtils";
 const USERS_URL = API_URL + "/user";
 const USERSADD_URL = API_URL + "/user/add";
 const PARKING_URL = API_URL + "/parking";
+const PARKINGADD_URL = API_URL + "/parking/add";
+const PAREA_URL = API_URL + "/pArea";
 
 
 
@@ -18,9 +20,17 @@ export interface UserDetails {
     zipCode: number;
   };
 
+export interface Parea {
+    id: number | null;
+    areaName: string;
+    city: string;
+    postalCode: number;
+    daysAllowedParking: number;
+  }
+
   export interface Parking {
     id: number | null;
-    pArea: string;
+    parea: Parea; 
     plateNumber: string;
     startTime: string; 
     endTime: string;
@@ -32,6 +42,7 @@ export interface UserDetails {
 
   let users: Array<UserDetails> = [];
   let parking: Array<Parking> = [];
+  let parea: Array<Parea> = [];
 
 
   /* USERS */
@@ -85,11 +96,23 @@ async function addUser(newUser: UserDetails): Promise<UserDetails> {
 async function addParking(newParking: Parking): Promise<Parking> {
     const method = newParking.id ? "PUT" : "POST";
     const options = makeOptions(method, newParking);
-    const URL = newParking.id ? `${PARKING_URL}/${newParking.id}` : PARKING_URL;
+    const URL = newParking.id ? `${PARKINGADD_URL}/${newParking.id}` : PARKINGADD_URL;
     return fetch(URL, options).then(handleHttpErrors);
     }
 
 
+async function getParea(): Promise<Array<Parea>> {
+    try {
+      const res = await fetch(PAREA_URL);
+      const data = await res.json();
+      console.log("API response:", data);
+      return data;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  }
+
 
   
-export { getUsers, getUser, addUser, getParkings, getParking, addParking };
+export { getUsers, getUser, addUser, getParkings, getParking, addParking, getParea, };

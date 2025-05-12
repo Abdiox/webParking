@@ -5,8 +5,8 @@ interface HomeTextProps {
   parking: Parking[];
   loading: boolean;
   error: string | null;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onSubmit: (e: React.FormEvent) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSubmit?: (e: React.FormEvent) => void;
 }
 
 export default function HomeText({ parking, loading, error }: HomeTextProps) {
@@ -22,23 +22,33 @@ export default function HomeText({ parking, loading, error }: HomeTextProps) {
       )}
       {!loading && parking.length > 0 && (
         <ul style={{ listStyle: "none", padding: 0 }}>
-          {parking.map((p) => (
-            <li
-              key={p.id}
-              style={{
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "10px",
-                marginBottom: "10px",
-              }}
-            >
-              <p><strong>Område:</strong> {p.parea}</p>
-              <p><strong>Nummerplade:</strong> {p.plateNumber}</p>
-              <p><strong>Start:</strong> {new Date(p.startTime).toLocaleString()}</p>
-              <p><strong>Slut:</strong> {new Date(p.endTime).toLocaleString()}</p>
-              <p><strong>Bruger ID:</strong> {p.userId}</p>
-            </li>
-          ))}
+          {parking.map((p) => {
+            // Add null checks to prevent errors
+            const parea = p.parea || {};
+            return (
+              <li
+                key={p.id || 'unknown'}
+                style={{
+                  border: "1px solid #ccc",
+                  borderRadius: "5px",
+                  padding: "10px",
+                  marginBottom: "10px",
+                }}
+              >
+                <p>
+                  <strong>Område:</strong>{" "}
+                  {parea.areaName || 'Ukendt område'}, 
+                  {parea.city || 'Ukendt by'} 
+                  ({parea.postalCode || 'Ukendt postnummer'}) 
+                  – {parea.daysAllowedParking || 0} dage
+                </p>
+                <p><strong>Nummerplade:</strong> {p.plateNumber || 'Ingen nummerplade'}</p>
+                <p><strong>Start:</strong> {p.startTime ? new Date(p.startTime).toLocaleString() : 'Ingen startdato'}</p>
+                <p><strong>Slut:</strong> {p.endTime ? new Date(p.endTime).toLocaleString() : 'Ingen slutdato'}</p>
+                <p><strong>Bruger ID:</strong> {p.userId}</p>
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>
