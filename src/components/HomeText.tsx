@@ -23,7 +23,6 @@ export default function HomeText({ parking, loading, error }: HomeTextProps) {
       {!loading && parking.length > 0 && (
         <ul style={{ listStyle: "none", padding: 0 }}>
           {parking.map((p) => {
-            // Add null checks to prevent errors
             const parea = p.parea || {};
             return (
               <li

@@ -5,15 +5,20 @@ import type { Parking, Parea } from "../services/apiFacade";
 import ParkingForm from "../forms/ParkingForm";
 
 const EMPTY_PARKING: Parking = {
-    id: null,
-    pArea: "",
-    plateNumber: "",
-    startTime: "",
-    endTime: "",
-    userId: 0,
-    userName: "",
-  };
-  
+  id: null,
+  parea: {
+    id: 0,
+    areaName: '',
+    city: '',
+    postalCode: 0,
+    daysAllowedParking: 0
+  },
+  plateNumber: "",
+  startTime: "",
+  endTime: "",
+  userId: 0,
+  userName: "",
+};
 
 export default function Parking() {
   const navigate = useNavigate();
@@ -34,16 +39,35 @@ export default function Parking() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setParking({
-      ...parking,
-      [name]: name === "userId" ? Number(value) : value,
-    });
+    
+    if (name === 'pArea') {
+      // Find the selected area and set it as the parea
+      const selectedArea = areas.find(area => area.areaName === value);
+      if (selectedArea) {
+        setParking(prev => ({
+          ...prev,
+          parea: selectedArea
+        }));
+      }
+    } else {
+      setParking(prev => ({
+        ...prev,
+        [name]: name === "userId" ? Number(value) : value,
+        userId: userId!
+      }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await addParking({ ...parking, userId: userId!, userName });
+      const parkingToSubmit = {
+        ...parking,
+        userId: userId!,
+        userName
+      };
+      
+      await addParking(parkingToSubmit);
       alert("Parkering oprettet!");
       navigate("/home");
     } catch (error) {
@@ -54,7 +78,12 @@ export default function Parking() {
 
   return (
     <div>
-      <ParkingForm parking={parking} areas={areas} onChange={handleChange} onSubmit={handleSubmit} />
+      <ParkingForm 
+        parking={parking} 
+        areas={areas} 
+        onChange={handleChange} 
+        onSubmit={handleSubmit} 
+      />
     </div>
   );
 }
