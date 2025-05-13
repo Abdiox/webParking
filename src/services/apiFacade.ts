@@ -35,7 +35,6 @@ export interface Parea {
     startTime: string; 
     endTime: string;
     userId: number;      
-    userName: string;  
   }
   
 

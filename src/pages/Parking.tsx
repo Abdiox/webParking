@@ -17,22 +17,18 @@ const EMPTY_PARKING: Parking = {
   startTime: "",
   endTime: "",
   userId: 0,
-  userName: "",
 };
 
 export default function Parking() {
   const navigate = useNavigate();
   const [parking, setParking] = useState<Parking>({ ...EMPTY_PARKING });
   const [userId, setUserId] = useState<number | null>(null);
-  const [userName, setUserName] = useState<string>("");
   const [areas, setAreas] = useState<Parea[]>([]);
 
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
-    const storedUserName = localStorage.getItem("email");
 
     if (storedUserId) setUserId(Number(storedUserId));
-    if (storedUserName) setUserName(storedUserName);
 
     getParea().then(setAreas);
   }, []);
@@ -64,7 +60,6 @@ export default function Parking() {
       const parkingToSubmit = {
         ...parking,
         userId: userId!,
-        userName
       };
       
       await addParking(parkingToSubmit);
