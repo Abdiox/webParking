@@ -14,12 +14,12 @@ const NavBar: React.FC = () => {
     <div className="navbar-container">
       <div className="topbar">
       
-        <div className="app-title-small">ParkeringsApp</div>
+        <div className="app-title-small">AM PARKING</div>
       </div>
 
       <div className="sidebar">
         <div className="app-title">
-          <h2>ParkeringsApp</h2>
+          <h2>AM PARKING</h2>
         </div>
         
         <nav className="nav-links">
