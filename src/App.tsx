@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Login from "./security/Login";
 import Register from "./security/Register";
 import Parking from "./pages/Parking";
+import MyParkings from "./pages/MyParkings";
 import "./App.css";
 
 function App() {
@@ -16,6 +17,10 @@ function App() {
         <Route path="/register" element={<Register />} />
         
         <Route path="/home" element={<Home />} />
+        <Route path="/my-parkings" element={<MyParkings />} />
+
+        
+        {/* Assuming you have a MyParkings component */}
         <Route path="/parking" element={<Parking />} />
         
         <Route path="*" element={<Navigate to="/login" replace />} />

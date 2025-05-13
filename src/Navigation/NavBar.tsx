@@ -32,7 +32,7 @@ const NavBar: React.FC = () => {
           </NavLink>
           
           <NavLink 
-            to="/home" 
+            to="/my-parkings" 
             className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
           >
             <i className="icon">🅿️</i>
