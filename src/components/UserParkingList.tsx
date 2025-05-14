@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import type { Parking } from "../services/apiFacade";
+import ParkingInfoModal from "../modalView/ParkinginfoModal";
 import "./UserParkingList.css";
 
-// Update the Parking interface to include the parea property
 interface ParkingArea {
   areaName: string;
   city: string;
@@ -11,7 +11,6 @@ interface ParkingArea {
   postalCode: number;
 }
 
-// Extend the Parking interface to include the parea property
 interface ExtendedParking extends Parking {
   parea?: ParkingArea;
 }
@@ -23,16 +22,30 @@ interface Props {
 }
 
 const UserParkingList: React.FC<Props> = ({ parkings, loading, error }) => {
-  // Formaterer dato til dansk format
+  const [activeModal, setActiveModal] = useState<number | null>(null);
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}, ${date.getHours()}:${String(date.getMinutes()).padStart(2, "0")}`;
   };
 
-  // Beregner om parkeringen er aktiv (sluttid > nu)
   const isActive = (endTime: string) => {
     return new Date(endTime) > new Date();
   };
+
+  const openModal = (parkingId: number) => {
+    setActiveModal(parkingId);
+  };
+
+  const closeModal = () => {
+    setActiveModal(null);
+  };
+
+
+  // Find parkingArea for active modal
+  const activeParkingArea = activeModal !== null
+    ? parkings.find(p => p.id === activeModal)?.parea
+    : undefined;
 
   return (
     <div className="parking-app">
@@ -73,9 +86,21 @@ const UserParkingList: React.FC<Props> = ({ parkings, loading, error }) => {
                 </div>
                 
                 <div className="parking-body">
-                  <p className="parking-location">
-                    {parking.parea ? `${parking.parea.areaName} - ${parking.parea.city} ${parking.parea.postalCode}` : "Parkeringsområde ikke angivet"}
-                  </p>
+                  <div className="parking-location-container">
+                    <p className="parking-location">
+                      {parking.parea ? `${parking.parea.areaName} - ${parking.parea.city} ${parking.parea.postalCode}` : "Parkeringsområde ikke angivet"}
+                    </p>
+                    
+                    {parking.parea && (
+                      <span 
+                        className="settings-icon" 
+                        onClick={() => openModal(parking.id)}
+                        title="Vis parkeringsområde detaljer"
+                      >
+                        ⚙️
+                      </span>
+                    )}
+                  </div>
                   <p className="parking-validity">Gyldig t.o.m: {formatDate(parking.endTime)}</p>
                 </div>
                 
@@ -89,8 +114,14 @@ const UserParkingList: React.FC<Props> = ({ parkings, loading, error }) => {
         )}
       </div>
 
-      {/* Add button (der vises nederst i wireframe) */}
+      <ParkingInfoModal 
+        show={activeModal !== null}
+        onClose={closeModal}
+        parkingArea={activeParkingArea}
+      />
+
       <div className="add-button">
+
         <span className="add-icon">+</span>
       </div>
     </div>
