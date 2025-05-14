@@ -1,5 +1,8 @@
 import React from "react";
 import type { Parking } from "../services/apiFacade";
+import UserParkingList from "./UserParkingList";
+import { useUserParkings } from "../hooks/useUserParkings";
+import "./HomeText.css"; // 💅 tilføj CSS
 
 interface HomeTextProps {
   parking: Parking[];
@@ -10,45 +13,32 @@ interface HomeTextProps {
 }
 
 export default function HomeText({ parking, loading, error }: HomeTextProps) {
-  return (
-    <div>
-      <h1>Velkommen til Parkeringsappen</h1>
-      <p>Logget ind som: {localStorage.getItem("email")} (ID: {localStorage.getItem("userId")})</p>
+  const { parkings, loading: hookLoading, error: hookError } = useUserParkings();
 
-      {loading && <p>Indlæser parkeringer...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {!loading && parking.length === 0 && !error && (
-        <p>Du har ingen aktive parkeringer.</p>
-      )}
-      {!loading && parking.length > 0 && (
-        <ul style={{ listStyle: "none", padding: 0 }}>
-          {parking.map((p) => {
-            const parea = p.parea || {};
-            return (
-              <li
-                key={p.id || 'unknown'}
-                style={{
-                  border: "1px solid #ccc",
-                  borderRadius: "5px",
-                  padding: "10px",
-                  marginBottom: "10px",
-                }}
-              >
-                <p>
-                  <strong>Område:</strong>{" "}
-                  {parea.areaName || 'Ukendt område'}, 
-                  {parea.city || 'Ukendt by'} 
-                  ({parea.postalCode || 'Ukendt postnummer'}) 
-                  – {parea.daysAllowedParking || 0} dage
-                </p>
-                <p><strong>Nummerplade:</strong> {p.plateNumber || 'Ingen nummerplade'}</p>
-                <p><strong>Start:</strong> {p.startTime ? new Date(p.startTime).toLocaleString() : 'Ingen startdato'}</p>
-                <p><strong>Slut:</strong> {p.endTime ? new Date(p.endTime).toLocaleString() : 'Ingen slutdato'}</p>
-                <p><strong>Bruger ID:</strong> {p.userId}</p>
-              </li>
-            );
-          })}
-        </ul>
+  const now = new Date();
+
+  const activeParkings = parkings.filter((p) => {
+    return new Date(p.endTime) > now;
+  });
+
+  return (
+    <div className="home-container">
+      <h1 className="home-title">Velkommen AM's Parkerings Web Page!</h1>
+      <p className="home-user">
+        Logget ind som: <strong>{localStorage.getItem("email")}</strong> <br />
+        ID: {localStorage.getItem("userId")}
+        
+      </p>
+
+      <h2 className="home-subtitle">Dine aktive parkeringer</h2>
+
+      {hookLoading && <p className="loading">Indlæser parkeringer …</p>}
+      {hookError && <p className="error">{hookError}</p>}
+
+      {activeParkings.length > 0 ? (
+        <UserParkingList parkings={activeParkings} loading={false} error={null} />
+      ) : (
+        !hookLoading && <p className="no-parking">Du har ingen aktive parkeringer.</p>
       )}
     </div>
   );

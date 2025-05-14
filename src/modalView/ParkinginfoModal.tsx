@@ -42,7 +42,7 @@ const ParkingInfoModal: React.FC<ParkingInfoModalProps> = ({
           </div>
           <div className="modal-info-row highlight">
             <span className="modal-info-label">Tilladte parkeringsdage:</span>
-            <span className="modal-info-value">{parkingArea.daysAllowedParking} dage</span>
+            <span className="modal-info-value">Maks: {parkingArea.daysAllowedParking} dage</span>
           </div>
         </>
       ) : (

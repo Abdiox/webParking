@@ -10,7 +10,8 @@ const PAREA_URL = API_URL + "/pArea";
 
 export interface UserDetails {
     id: number | null;
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
     password: string;
     phoneNumber: number;
@@ -86,6 +87,9 @@ async function addUser(newUser: UserDetails): Promise<UserDetails> {
       return [];
     }
   }
+
+
+  /** Parking **/
   
 
   async function getParking(id: number): Promise<Parking>{
@@ -98,6 +102,9 @@ async function addParking(newParking: Parking): Promise<Parking> {
     const URL = newParking.id ? `${PARKINGADD_URL}/${newParking.id}` : PARKINGADD_URL;
     return fetch(URL, options).then(handleHttpErrors);
     }
+
+
+      /** P-Area **/
 
 
 async function getParea(): Promise<Array<Parea>> {
