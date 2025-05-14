@@ -2,7 +2,7 @@ import React from "react";
 import type { Parking } from "../services/apiFacade";
 import UserParkingList from "./UserParkingList";
 import { useUserParkings } from "../hooks/useUserParkings";
-import "./HomeText.css"; // 💅 tilføj CSS
+import "./HomeText.css";
 
 interface HomeTextProps {
   parking: Parking[];
@@ -24,11 +24,7 @@ export default function HomeText({ parking, loading, error }: HomeTextProps) {
   return (
     <div className="home-container">
       <h1 className="home-title">Velkommen AM's Parkerings Web Page!</h1>
-      <p className="home-user">
-        Logget ind som: <strong>{localStorage.getItem("email")}</strong> <br />
-        ID: {localStorage.getItem("userId")}
-        
-      </p>
+      
 
       <h2 className="home-subtitle">Dine aktive parkeringer</h2>
 

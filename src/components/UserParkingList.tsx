@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import type { Parking } from "../services/apiFacade";
+import { editParking, deleteParking } from "../services/apiFacade";
 import ParkingInfoModal from "../modalView/ParkinginfoModal";
 import "./UserParkingList.css";
 
@@ -106,6 +107,9 @@ const UserParkingList: React.FC<Props> = ({ parkings, loading, error }) => {
                 
                 <div className="parking-actions">
                   <button className="action-button edit">ÆNDRE</button>
+                  <button className="action-button" onClick={() => editParking(parking.id)}>FORLÆNG</button>
+                  <button className="action-button" onClick={() => deleteParking(parking.id)}>AFBRYD</button>
+                  <button className="action-button" onClick={() => deleteParking(parking.id)}>SLET</button>
                   <button className="action-button delete">Slet</button>
                 </div>
               </div>

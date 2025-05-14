@@ -15,6 +15,11 @@ const UserProfileDetails: React.FC<Props> = ({ user }) => {
       <h2 className="profile-title">Brugeroplysninger</h2>
 
       <div className="profile-row">
+        <span className="label">Lejemåls ID:</span>
+        <span>{user.rentalUnit}</span>
+      </div>
+
+      <div className="profile-row">
         <span className="label">Fornavn:</span>
         <span>{user.firstName}</span>
       </div>
@@ -37,10 +42,6 @@ const UserProfileDetails: React.FC<Props> = ({ user }) => {
         <span>
           {user.adress}, {user.city} {user.zipCode}
         </span>
-      </div>
-      <div className="profile-row">
-        <span className="label">Lejemåls ID:</span>
-        <span>{user.rentalUnit}</span>
       </div>
     </div>
   );

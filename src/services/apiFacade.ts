@@ -87,9 +87,6 @@ async function addUser(newUser: UserDetails): Promise<UserDetails> {
       return [];
     }
   }
-
-
-  /** Parking **/
   
 
   async function getParking(id: number): Promise<Parking>{
@@ -103,6 +100,20 @@ async function addParking(newParking: Parking): Promise<Parking> {
     return fetch(URL, options).then(handleHttpErrors);
     }
 
+
+    async function editParking(newParking: Parking): Promise<Parking> {
+      const method = newParking.id ? "PUT" : "POST";
+      const options = makeOptions(method, newParking, true);
+      const URL = newParking.id ? `${PARKING_URL}/${newParking.id}` : PARKING_URL;
+      return fetch(URL, options).then(handleHttpErrors);
+    }
+  
+  
+    async function deleteParking(id: number): Promise<void> {
+      const options = makeOptions("DELETE", null);
+      return fetch(PARKING_URL + "/" + id, options).then(handleHttpErrors);
+    }
+  
 
       /** P-Area **/
 
@@ -121,4 +132,4 @@ async function getParea(): Promise<Array<Parea>> {
 
 
   
-export { getUsers, getUser, addUser, getParkings, getParking, addParking, getParea, };
+export { getUsers, getUser, addUser, getParkings, getParking, editParking, deleteParking, addParking, getParea, };
