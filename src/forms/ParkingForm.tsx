@@ -8,7 +8,10 @@ interface RegistrationFormProps {
   onSubmit: (e: React.FormEvent) => void;
 }
 
+
 export default function RegistrationForm({ parking, areas, onChange, onSubmit }: RegistrationFormProps) {
+  const now = new Date().toISOString().slice(0, 16); 
+
   return (
     <form onSubmit={onSubmit}>
       <h2>Registrer Parkering</h2>
@@ -24,8 +27,8 @@ export default function RegistrationForm({ parking, areas, onChange, onSubmit }:
       </select>
 
       <input name="plateNumber" placeholder="Nummerplade" value={parking.plateNumber} onChange={onChange} required />
-      <input name="startTime" type="datetime-local" value={parking.startTime} onChange={onChange} required />
-      <input name="endTime" type="datetime-local" value={parking.endTime} onChange={onChange} required />
+      <input name="startTime" type="datetime-local" value={parking.startTime} onChange={onChange} required min={now} />
+      <input name="endTime" type="datetime-local" value={parking.endTime} onChange={onChange} required min={now} />
       <button type="submit">Opret Parkering</button>
     </form>
   );
