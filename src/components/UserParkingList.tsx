@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { Parking } from "../services/apiFacade";
-import { editParking, deleteParking } from "../services/apiFacade";
 import ParkingInfoModal from "../modalView/ParkinginfoModal";
+import ParkingEditDeleteModal from "../modalView/ParkingEditDeleteModal";
 import "./UserParkingList.css";
 
 interface ParkingArea {
@@ -24,6 +24,13 @@ interface Props {
 
 const UserParkingList: React.FC<Props> = ({ parkings, loading, error }) => {
   const [activeModal, setActiveModal] = useState<number | null>(null);
+  
+  // Tilføj state for redigerings/sletnings modal
+  const [editDeleteModal, setEditDeleteModal] = useState({
+    show: false,
+    parking: null as ExtendedParking | null,
+    actionType: "" as "edit" | "delete" | ""
+  });
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -34,6 +41,7 @@ const UserParkingList: React.FC<Props> = ({ parkings, loading, error }) => {
     return new Date(endTime) > new Date();
   };
 
+  // Funktioner til info modal
   const openModal = (parkingId: number) => {
     setActiveModal(parkingId);
   };
@@ -41,7 +49,31 @@ const UserParkingList: React.FC<Props> = ({ parkings, loading, error }) => {
   const closeModal = () => {
     setActiveModal(null);
   };
-
+  
+  // Funktioner til edit/delete modal
+  const openEditModal = (parking: ExtendedParking) => {
+    setEditDeleteModal({
+      show: true,
+      parking: parking,
+      actionType: "edit"
+    });
+  };
+  
+  const openDeleteModal = (parking: ExtendedParking) => {
+    setEditDeleteModal({
+      show: true,
+      parking: parking,
+      actionType: "delete"
+    });
+  };
+  
+  const closeEditDeleteModal = () => {
+    setEditDeleteModal({
+      show: false,
+      parking: null,
+      actionType: ""
+    });
+  };
 
   // Find parkingArea for active modal
   const activeParkingArea = activeModal !== null
@@ -78,7 +110,7 @@ const UserParkingList: React.FC<Props> = ({ parkings, loading, error }) => {
                     <img src="https://i.ibb.co/5X0tBbJV/Chat-GPT-Image-Apr-28-2025-01-54-15-PM.png" alt="AM Parking Logo" className="parking-logo-small" />
                   </div>
                   <div className="parking-info">
-                    <h3 className="plate-number">{parking.plateNumber}</h3>
+                    <h3 className="plate-number">{parking.plateNumber || parking.licensePlate}</h3>
                   </div>
                   <div className="parking-status">
                     <span className={`status-indicator ${isActive(parking.endTime) ? "active" : ""}`}></span>
@@ -89,7 +121,7 @@ const UserParkingList: React.FC<Props> = ({ parkings, loading, error }) => {
                 <div className="parking-body">
                   <div className="parking-location-container">
                     <p className="parking-location">
-                      {parking.parea ? `${parking.parea.areaName} - ${parking.parea.city} ${parking.parea.postalCode}` : "Parkeringsområde ikke angivet"}
+                      {parking.parea ? `${parking.parea.areaName} - ${parking.parea.city} ${parking.parea.postalCode}` : (parking.zone?.name || "Parkeringsområde ikke angivet")}
                     </p>
                     
                     {parking.parea && (
@@ -106,11 +138,20 @@ const UserParkingList: React.FC<Props> = ({ parkings, loading, error }) => {
                 </div>
                 
                 <div className="parking-actions">
-                  <button className="action-button edit">ÆNDRE</button>
-                  <button className="action-button" onClick={() => editParking(parking.id)}>FORLÆNG</button>
-                  <button className="action-button" onClick={() => deleteParking(parking.id)}>AFBRYD</button>
-                  <button className="action-button" onClick={() => deleteParking(parking.id)}>SLET</button>
-                  <button className="action-button delete">Slet</button>
+                  <button 
+                    className="action-button edit" 
+                    onClick={() => openEditModal(parking)}
+                  >
+                    ÆNDRE
+                  </button>
+                  <button className="action-button">FORLÆNG</button>
+                  <button className="action-button">AFBRYD</button>
+                  <button 
+                    className="action-button delete" 
+                    onClick={() => openDeleteModal(parking)}
+                  >
+                    SLET
+                  </button>
                 </div>
               </div>
             ))}
@@ -118,14 +159,22 @@ const UserParkingList: React.FC<Props> = ({ parkings, loading, error }) => {
         )}
       </div>
 
+      {/* Info Modal */}
       <ParkingInfoModal 
         show={activeModal !== null}
         onClose={closeModal}
         parkingArea={activeParkingArea}
       />
+      
+      {/* Edit/Delete Modal */}
+      <ParkingEditDeleteModal
+        show={editDeleteModal.show}
+        onClose={closeEditDeleteModal}
+        parking={editDeleteModal.parking}
+        actionType={editDeleteModal.actionType}
+      />
 
       <div className="add-button">
-
         <span className="add-icon">+</span>
       </div>
     </div>
