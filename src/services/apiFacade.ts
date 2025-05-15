@@ -1,9 +1,7 @@
 import { API_URL } from "../settings";
 import { makeOptions, handleHttpErrors } from "./fetchUtils";
 const USERS_URL = API_URL + "/user";
-const USERSADD_URL = API_URL + "/user/add";
 const PARKING_URL = API_URL + "/parking";
-const PARKINGADD_URL = API_URL + "/parking/add";
 const PAREA_URL = API_URL + "/pArea";
 
 
@@ -63,19 +61,40 @@ async function getUsers(): Promise<Array<UserDetails>> {
   }
 }
 
-async function getUser(id: number): Promise<UserDetails>{
-    return fetch(USERS_URL + "/" + id)
-    .then(handleHttpErrors)
+async function addUser(user: UserDetails): Promise<UserDetails> {
+  const options = makeOptions("POST", user);
+  return fetch(USERS_URL + "/add", options).then(handleHttpErrors);
 }
 
-async function addUser(newUser: UserDetails): Promise<UserDetails> {
-    const method = newUser.id ? "PUT" : "POST";
-    const options = makeOptions(method, newUser);
-    const URL = newUser.id ? `${USERSADD_URL}/${newUser.id}` : USERSADD_URL;
-    return fetch(URL, options).then(handleHttpErrors);
-    }
+async function getUser(id: number): Promise<UserDetails> {
+  return fetch(USERS_URL + "/" + id)
+  .then(handleHttpErrors)
+}
+async function editUser(user: UserDetails): Promise<UserDetails> {
+  const options = makeOptions("PUT", user);
+  return fetch(USERS_URL + "/" + user.id, options).then(handleHttpErrors);
+}
+
+async function deleteUser(id: number): Promise<void> {
+  console.log("Deleting user with ID:", id);
+  const options = makeOptions("DELETE", null);
+
+  const response = await fetch(USERS_URL + "/" + id, options);
+   console.log("Response from deleteUser:", response);
+  if (!response.ok) {
+    throw new Error(`Failed to delete user with status: ${response.status}`);
+  }
+}
+  // Remove the user from the local users array
+
+
+
+
+
 
   /* PARKING */
+
+
   async function getParkings(): Promise<Array<Parking>> {
     try {
       const res = await fetch(PARKING_URL);
@@ -93,26 +112,32 @@ async function addUser(newUser: UserDetails): Promise<UserDetails> {
     return fetch(PARKING_URL + "/" + id)
     .then(handleHttpErrors)
 }
-async function addParking(newParking: Parking): Promise<Parking> {
-    const method = newParking.id ? "PUT" : "POST";
-    const options = makeOptions(method, newParking);
-    const URL = newParking.id ? `${PARKINGADD_URL}/${newParking.id}` : PARKINGADD_URL;
-    return fetch(URL, options).then(handleHttpErrors);
-    }
 
+ async function addParking(parking: Parking): Promise<Parking> {
+  const options = makeOptions("POST", parking);
+  return fetch(PARKING_URL + "/add", options).then(handleHttpErrors);
+}
 
-    async function editParking(newParking: Parking): Promise<Parking> {
-      const method = newParking.id ? "PUT" : "POST";
-      const options = makeOptions(method, newParking, true);
-      const URL = newParking.id ? `${PARKING_URL}/${newParking.id}` : PARKING_URL;
-      return fetch(URL, options).then(handleHttpErrors);
-    }
+export async function getUserParkings(userId: number): Promise<Array<Parking>> {
+  return fetch(PARKING_URL + "/user/" + userId).then(handleHttpErrors);
+}
+
+async function editParking(parking: Parking): Promise<Parking> {
+  const options = makeOptions("PUT", parking);
+  return fetch(PARKING_URL + "/" + parking.id, options).then(handleHttpErrors);
+}
+
+async function deleteParking(id: number): Promise<void> {
+  console.log("Deleting parking with ID:", id);
+  const options = makeOptions("DELETE", null);
   
-  
-    async function deleteParking(id: number): Promise<void> {
-      const options = makeOptions("DELETE", null);
-      return fetch(PARKING_URL + "/" + id, options).then(handleHttpErrors);
-    }
+  const response = await fetch(PARKING_URL + "/" + id, options);
+   console.log("Response from deleteParking:", response);
+   
+  if (!response.ok) {
+    throw new Error(`Failed to delete parking with status: ${response.status}`);
+  }
+}
   
 
       /** P-Area **/
@@ -130,6 +155,34 @@ async function getParea(): Promise<Array<Parea>> {
     }
   }
 
+async function getPareaById(id: number): Promise<Parea> {
+    return fetch(PAREA_URL + "/" + id)
+    .then(handleHttpErrors)
+
+}
+
+async function addParea(parea: Parea): Promise<Parea> {
+    const options = makeOptions("POST", parea);
+    return fetch(PAREA_URL + "/add", options).then(handleHttpErrors);
+}
+
+async function editParea(parea: Parea): Promise<Parea> {
+    const options = makeOptions("PUT", parea);
+    return fetch(PAREA_URL + "/" + parea.id, options).then(handleHttpErrors);
+}
+
+async function deleteParea(id: number): Promise<void> {
+    console.log("Deleting Parea with ID:", id);
+    const options = makeOptions("DELETE", null);
+    
+    const response = await fetch(PAREA_URL + "/" + id, options);
+     console.log("Response from deleteParea:", response);
+     
+    if (!response.ok) {
+      throw new Error(`Failed to delete Parea with status: ${response.status}`);
+    }
+  }
+
 
   
-export { getUsers, getUser, addUser, getParkings, getParking, editParking, deleteParking, addParking, getParea, };
+export { getUsers, getUser, addUser, editUser, deleteUser, getParkings, getParking, editParking, deleteParking, addParking, getParea, getPareaById, addParea, editParea, deleteParea };
