@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import type { Parking } from "../services/apiFacade";
 import ParkingInfoModal from "../modalView/ParkinginfoModal";
 import ParkingEditDeleteModal from "../modalView/ParkingEditDeleteModal";
+import { useNavigate } from "react-router-dom";
 import "./UserParkingList.css";
 
 interface ParkingArea {
@@ -24,8 +25,7 @@ interface Props {
 
 const UserParkingList: React.FC<Props> = ({ parkings, loading, error }) => {
   const [activeModal, setActiveModal] = useState<number | null>(null);
-  
-  // Tilføj state for redigerings/sletnings modal
+  const navigate = useNavigate();
   const [editDeleteModal, setEditDeleteModal] = useState({
     show: false,
     parking: null as ExtendedParking | null,
@@ -166,7 +166,6 @@ const UserParkingList: React.FC<Props> = ({ parkings, loading, error }) => {
         parkingArea={activeParkingArea}
       />
       
-      {/* Edit/Delete Modal */}
       <ParkingEditDeleteModal
         show={editDeleteModal.show}
         onClose={closeEditDeleteModal}
@@ -175,7 +174,7 @@ const UserParkingList: React.FC<Props> = ({ parkings, loading, error }) => {
       />
 
       <div className="add-button">
-        <span className="add-icon">+</span>
+        <span  onClick={() => navigate("/create-parking")} className="add-icon">+</span>
       </div>
     </div>
   );
