@@ -52,7 +52,7 @@ const NavBar: React.FC = () => {
           </NavLink>
 
           <NavLink 
-            to="/parking" 
+            to="/create-parking" 
             className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
           >
             <span className="icon">➕</span>
@@ -65,6 +65,14 @@ const NavBar: React.FC = () => {
           >
             <span className="icon">👤</span>
             <span>Min Profil</span>
+          </NavLink>
+
+          <NavLink 
+            to="/contact-us" 
+            className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+          >
+            <span className="icon">✉️</span>
+            <span>Kontakt Os</span>
           </NavLink>
         </div>
 

@@ -2,7 +2,7 @@ import React from "react";
 import { useParkingForm } from "../hooks/useParkingForm";
 import ParkingForm from "../forms/ParkingForm";
 
-export default function Parking() {
+export default function CreateParking() {
   const {
     parking,
     areas,
