@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import Modal from "./Modal";
 import { editParking, deleteParking } from "../services/apiFacade";
+import { useNavigate } from "react-router-dom";
 
-// Simpel modal til redigering eller sletning af en parkering
 const ParkingEditDeleteModal = ({ show, onClose, parking, actionType }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [extendDays, setExtendDays] = useState(1);
+  const navigate = useNavigate();
   
   const handleEdit = async () => {
     if (!parking) return;
@@ -29,6 +30,9 @@ const ParkingEditDeleteModal = ({ show, onClose, parking, actionType }) => {
     try {
       await deleteParking(parking.id);
       alert("Parkering slettet!");
+      window.location.reload();
+      navigate("/my-parking");
+      
       onClose();
     } catch (error) {
       alert("Der skete en fejl: " + error);

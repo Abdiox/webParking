@@ -7,6 +7,7 @@ import Register from "./security/Register";
 import Parking from "./pages/Parking";
 import MyParkings from "./pages/MyParkings";
 import Profile from "./pages/Profile";
+import { ParkingAreas } from "./pages/ParkingAreas";
 import "./App.css";
 
 function App() {
@@ -19,6 +20,8 @@ function App() {
         
         <Route path="/home" element={<Home />} />
         <Route path="/my-parkings" element={<MyParkings />} />
+        <Route path="/parking-areas" element={<ParkingAreas />} />
+        
         <Route path="/profile" element={<Profile />} />
         
 
