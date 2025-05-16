@@ -48,7 +48,7 @@ const NavBar: React.FC = () => {
             className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
           >
             <span className="icon">🗺️</span>
-            <span>Parkering Områder</span>
+            <span>Parkerings Områder</span>
           </NavLink>
 
           <NavLink 
