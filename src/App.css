@@ -1,11 +1,12 @@
+
 #root {
-  max-width: 100%; /* Changed from 1280px to allow full width */
+  max-width: 100%; 
   margin: 0 auto;
-  padding: 0; /* Removed padding that was taking up space */
-  text-align: left; /* Changed from center to allow natural text alignment */
+  padding: 0; 
+  text-align: left; 
 }
 
-/* Keep the logo styling if you're using it */
+
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -42,7 +43,6 @@
   color: #888;
 }
 
-/* Add some basic reset styles */
 body {
   margin: 0;
   padding: 0;

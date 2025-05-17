@@ -1,0 +1,228 @@
+/* RegisterForm.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+.register-page {
+  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.register-form::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, #007bff, #6c5ce7, #007bff);
+  background-size: 200% 100%;
+  animation: gradient 3s ease infinite;
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.register-form h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #2d3748;
+  text-align: center;
+  margin-bottom: 1.2rem;
+  letter-spacing: -0.5px;
+  position: relative;
+  width: 100%;
+}
+
+.register-form h2::after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 3px;
+  background: #007bff;
+  margin: 0.4rem auto 0;
+  border-radius: 5px;
+}
+
+/* Grid layout for inputs */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.input-group {
+  position: relative;
+  width: 100%;
+}
+
+.register-form input {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  padding-left: 2.8rem;
+  border: 1px solid #ddd;
+  border-radius: 0.7rem;
+  font-size: 0.95rem;
+  transition: all 0.3s;
+  background-color: #f8fafc;
+  color: #4a5568;
+  font-family: 'Poppins', sans-serif;
+}
+
+.register-form input::placeholder {
+  color: #a0aec0;
+}
+
+.register-form input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.15);
+  outline: none;
+  background-color: #fff;
+}
+
+.input-icon {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+  color: #a0aec0;
+  transition: color 0.3s;
+  font-size: 0.9rem;
+}
+
+.register-form input:focus + .input-icon {
+  color: #007bff;
+}
+
+.button-group {
+  width: 100%;
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.register-form button {
+  width: 100%;
+  padding: 0.9rem;
+  border: none;
+  border-radius: 0.7rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Poppins', sans-serif;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-primary:hover {
+  background-color: #0069d9;
+  transform: translateY(-2px);
+  box-shadow: 0 7px 20px rgba(0, 123, 255, 0.4);
+}
+
+.btn-secondary {
+  background-color: #edf2f7;
+  color: #4a5568;
+}
+
+.btn-secondary:hover {
+  background-color: #e2e8f0;
+  color: #2d3748;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.divider {
+  width: 100%;
+  text-align: center;
+  margin: 0.6rem 0;
+  position: relative;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 50%;
+  width: calc(50% - 30px);
+  height: 1px;
+  background-color: #e2e8f0;
+}
+
+.divider::before { left: 0; }
+.divider::after { right: 0; }
+
+.divider-text {
+  display: inline-block;
+  background: white;
+  padding: 0 15px;
+  position: relative;
+  color: #a0aec0;
+  font-size: 0.9rem;
+}
+
+/* Remove number input spinners */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Responsive design - stack inputs on mobile */
+@media (max-width: 550px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .register-form {
+    padding: 1.5rem 1.2rem;
+    width: 95%;
+  }
+  
+  .register-form h2 {
+    font-size: 1.5rem;
+  }
+  
+  .register-form input {
+    padding: 0.8rem 0.8rem 0.8rem 2.5rem;
+  }
+}

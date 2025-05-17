@@ -9,6 +9,7 @@ import MyParkings from "./pages/MyParkings";
 import Profile from "./pages/Profile";
 import { ParkingAreas } from "./pages/ParkingAreas";
 import { ContactUs } from "./pages/ContactUs";
+import "./App.css";
 
 function App() {
   return (
@@ -23,7 +24,8 @@ function App() {
         <Route path="/parking-areas" element={<ParkingAreas />} />
         <Route path="/create-parking" element={<CreateParking />} />
         <Route path="/contact-us" element={<ContactUs />} />
-                
+        
+        
         <Route path="/profile" element={<Profile />} />
         
 
