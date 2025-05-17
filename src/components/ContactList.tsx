@@ -30,12 +30,12 @@ export const ContactList: React.FC = () => {
                 </div>
             ) : (
                 <>
-                    <h1 className="contact-title">Contact Us</h1>
-                    <p className="contact-description">If you have any questions, feel free to reach out!</p>
+                    <h1 className="contact-title">Kontakt Os</h1>
+                    <p className="contact-description">Hvis du har spørgsmål, må du meget gerne kontakte os!</p>
                     
                     <form className="contact-form" onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <label className="form-label" htmlFor="name">Name:</label>
+                            <label className="form-label" htmlFor="name">Navn:</label>
                             <input 
                                 className="form-input" 
                                 type="text" 
@@ -57,7 +57,7 @@ export const ContactList: React.FC = () => {
                         </div>
                         
                         <div className="form-group">
-                            <label className="form-label" htmlFor="message">Message:</label>
+                            <label className="form-label" htmlFor="message">Besked:</label>
                             <textarea 
                                 className="form-textarea" 
                                 id="message" 
@@ -71,7 +71,7 @@ export const ContactList: React.FC = () => {
                             type="submit"
                             disabled={isSubmitting}
                         >
-                            {isSubmitting ? 'Sender...' : 'Submit'}
+                            {isSubmitting ? 'Sender...' : 'Send Besked'}
                         </button>
                     </form>
                 </>

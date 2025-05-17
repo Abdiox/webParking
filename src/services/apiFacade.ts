@@ -3,6 +3,7 @@ import { makeOptions, handleHttpErrors } from "./fetchUtils";
 const USERS_URL = API_URL + "/user";
 const PARKING_URL = API_URL + "/parking";
 const PAREA_URL = API_URL + "/pArea";
+const CARS_URL = API_URL + "/cars";
 
 
 
@@ -37,10 +38,24 @@ export interface Parea {
   }
   
 
+export interface Car {
+    id: number | null;
+    numberPlate: string;
+    brand: string;
+    model: string;
+    year: number;
+    color: string;
+    type: string;
+    description: string;
+    
+  }
+
+
 
   let users: Array<UserDetails> = [];
   let parking: Array<Parking> = [];
   let parea: Array<Parea> = [];
+  let cars: Array<Car> = [];
 
 
   /* USERS */
@@ -85,10 +100,6 @@ async function deleteUser(id: number): Promise<void> {
     throw new Error(`Failed to delete user with status: ${response.status}`);
   }
 }
-  // Remove the user from the local users array
-
-
-
 
 
 
@@ -184,5 +195,47 @@ async function deleteParea(id: number): Promise<void> {
   }
 
 
+        /** Cars **/
+        
+async function getCars(): Promise<Array<Car>> {
+    try {
+      const res = await fetch(CARS_URL);
+      const data = await res.json();
+      console.log("API response:", data);
+      return data;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  }
+
+async function getCar(id: number): Promise<Car> {
+    return fetch(CARS_URL + "/" + id)
+    .then(handleHttpErrors)
+
+}
+
+async function addCar(car: Car): Promise<Car> {
+    const options = makeOptions("POST", car);
+    return fetch(CARS_URL + "/add", options).then(handleHttpErrors);
+}
+
+async function editCar(car: Car): Promise<Car> {
+    const options = makeOptions("PUT", car);
+    return fetch(CARS_URL + "/" + car.id, options).then(handleHttpErrors);
+}
+
+async function deleteCar(id: number): Promise<void> {
+    console.log("Deleting Car with ID:", id);
+    const options = makeOptions("DELETE", null);
+    
+    const response = await fetch(CARS_URL + "/" + id, options);
+     console.log("Response from deleteCar:", response);
+     
+    if (!response.ok) {
+      throw new Error(`Failed to delete Car with status: ${response.status}`);
+    }
+  }
+
   
-export { getUsers, getUser, addUser, editUser, deleteUser, getParkings, getParking, editParking, deleteParking, addParking, getParea, getPareaById, addParea, editParea, deleteParea };
+export { getUsers, getUser, addUser, editUser, deleteUser, getParkings, getParking, editParking, deleteParking, addParking, getParea, getPareaById, addParea, editParea, deleteParea, getCars, getCar, addCar, editCar, deleteCar };

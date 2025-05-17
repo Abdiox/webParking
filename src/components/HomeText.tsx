@@ -23,6 +23,8 @@ export default function HomeText({ parking, loading, error }: HomeTextProps) {
 
   return (
     <div className="home-container">
+      
+      
       <h1 className="home-title">Velkommen AM's Parkerings Web Page!</h1>
       
 
