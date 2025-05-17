@@ -9,7 +9,6 @@ import MyParkings from "./pages/MyParkings";
 import Profile from "./pages/Profile";
 import { ParkingAreas } from "./pages/ParkingAreas";
 import { ContactUs } from "./pages/ContactUs";
-import "./App.css";
 
 function App() {
   return (
