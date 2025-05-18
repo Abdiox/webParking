@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import type { Parking } from "../services/apiFacade";
 import ParkingInfoModal from "../modalView/ParkinginfoModal";
-import ParkingEditDeleteModal from "../modalView/ParkingEditDeleteModal";
+import ParkingEditModal from "../modalView/ParkingEditModal";
+import ParkingDeleteModal from "../modalView/ParkingDeleteModal"; // Fixed import (removed curly braces)
 import { useNavigate } from "react-router-dom";
 import "./UserParkingList.css";
 
@@ -26,10 +27,18 @@ interface Props {
 const UserParkingList: React.FC<Props> = ({ parkings, loading, error }) => {
   const [activeModal, setActiveModal] = useState<number | null>(null);
   const navigate = useNavigate();
-  const [editDeleteModal, setEditDeleteModal] = useState({
+  
+  // Fixed state initialization for edit modal
+  const [editModal, setEditModal] = useState({
     show: false,
     parking: null as ExtendedParking | null,
-    actionType: "" as "edit" | "delete" | ""
+    actionType: ""
+  });
+  
+  // New state for delete modal
+  const [deleteModal, setDeleteModal] = useState({
+    show: false,
+    parking: null as ExtendedParking | null
   });
 
   const formatDate = (dateString: string) => {
@@ -41,7 +50,7 @@ const UserParkingList: React.FC<Props> = ({ parkings, loading, error }) => {
     return new Date(endTime) > new Date();
   };
 
-  // Funktioner til info modal
+  // Functions for info modal
   const openModal = (parkingId: number) => {
     setActiveModal(parkingId);
   };
@@ -50,32 +59,36 @@ const UserParkingList: React.FC<Props> = ({ parkings, loading, error }) => {
     setActiveModal(null);
   };
   
-  // Funktioner til edit/delete modal
   const openEditModal = (parking: ExtendedParking) => {
-    setEditDeleteModal({
+    setEditModal({
       show: true,
       parking: parking,
       actionType: "edit"
     });
   };
   
-  const openDeleteModal = (parking: ExtendedParking) => {
-    setEditDeleteModal({
-      show: true,
-      parking: parking,
-      actionType: "delete"
-    });
-  };
-  
-  const closeEditDeleteModal = () => {
-    setEditDeleteModal({
+  const closeEditModal = () => {
+    setEditModal({
       show: false,
       parking: null,
       actionType: ""
     });
   };
+  
+  const openDeleteModal = (parking: ExtendedParking) => {
+    setDeleteModal({
+      show: true,
+      parking: parking
+    });
+  };
+  
+  const closeDeleteModal = () => {
+    setDeleteModal({
+      show: false,
+      parking: null
+    });
+  };
 
-  // Find parkingArea for active modal
   const activeParkingArea = activeModal !== null
     ? parkings.find(p => p.id === activeModal)?.parea
     : undefined;
@@ -144,8 +157,6 @@ const UserParkingList: React.FC<Props> = ({ parkings, loading, error }) => {
                   >
                     ÆNDRE
                   </button>
-                  <button className="action-button">FORLÆNG</button>
-                  <button className="action-button">AFBRYD</button>
                   <button 
                     className="action-button delete" 
                     onClick={() => openDeleteModal(parking)}
@@ -159,22 +170,28 @@ const UserParkingList: React.FC<Props> = ({ parkings, loading, error }) => {
         )}
       </div>
 
-      {/* Info Modal */}
+      {/* Modals */}
       <ParkingInfoModal 
         show={activeModal !== null}
         onClose={closeModal}
         parkingArea={activeParkingArea}
       />
       
-      <ParkingEditDeleteModal
-        show={editDeleteModal.show}
-        onClose={closeEditDeleteModal}
-        parking={editDeleteModal.parking}
-        actionType={editDeleteModal.actionType}
+      <ParkingEditModal
+        show={editModal.show}
+        onClose={closeEditModal}
+        parking={editModal.parking}
+        actionType={editModal.actionType}
+      />
+      
+      <ParkingDeleteModal
+        show={deleteModal.show}
+        onClose={closeDeleteModal}
+        parking={deleteModal.parking}
       />
 
       <div className="add-button">
-        <span  onClick={() => navigate("/create-parking")} className="add-icon">+</span>
+        <span onClick={() => navigate("/create-parking")} className="add-icon">+</span>
       </div>
     </div>
   );
