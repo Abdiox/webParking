@@ -16,6 +16,9 @@ const Layout: React.FC = () => {
       <main className={showNavBar ? "main-content" : "main-content-full"}>
         <Outlet />
       </main>
+      <footer className="web-footer">
+        <p>AM PARKING 2025</p>
+      </footer>
     </div>
   );
 };

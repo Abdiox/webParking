@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import type { Parking } from "../services/apiFacade";
 import ParkingInfoModal from "../modalView/ParkinginfoModal";
 import ParkingEditModal from "../modalView/ParkingEditModal";
-import ParkingDeleteModal from "../modalView/ParkingDeleteModal"; // Fixed import (removed curly braces)
+import ParkingDeleteModal from "../modalView/ParkingDeleteModal";
 import { useNavigate } from "react-router-dom";
 import "./UserParkingList.css";
 
@@ -28,14 +28,12 @@ const UserParkingList: React.FC<Props> = ({ parkings, loading, error }) => {
   const [activeModal, setActiveModal] = useState<number | null>(null);
   const navigate = useNavigate();
   
-  // Fixed state initialization for edit modal
   const [editModal, setEditModal] = useState({
     show: false,
     parking: null as ExtendedParking | null,
     actionType: ""
   });
   
-  // New state for delete modal
   const [deleteModal, setDeleteModal] = useState({
     show: false,
     parking: null as ExtendedParking | null
@@ -50,7 +48,6 @@ const UserParkingList: React.FC<Props> = ({ parkings, loading, error }) => {
     return new Date(endTime) > new Date();
   };
 
-  // Functions for info modal
   const openModal = (parkingId: number) => {
     setActiveModal(parkingId);
   };
