@@ -59,6 +59,15 @@ const NavBar: React.FC = () => {
             <span>Ny Parkering</span>
           </NavLink>
 
+          <NavLink to="/my-cars"
+            className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+          >
+            <span className="icon">🚗</span>
+            <span>Mine Køretøjer</span>
+          </NavLink>
+
+          
+
           <NavLink 
             to="/profile" 
             className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}

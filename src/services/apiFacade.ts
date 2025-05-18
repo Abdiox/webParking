@@ -215,6 +215,11 @@ async function getCar(id: number): Promise<Car> {
 
 }
 
+async function getCarByUserId(userId: number): Promise<Car> {
+    return fetch(CARS_URL + "/user/" + userId)
+    .then(handleHttpErrors)
+}
+
 async function addCar(car: Car): Promise<Car> {
     const options = makeOptions("POST", car);
     return fetch(CARS_URL + "/add", options).then(handleHttpErrors);
@@ -238,4 +243,4 @@ async function deleteCar(id: number): Promise<void> {
   }
 
   
-export { getUsers, getUser, addUser, editUser, deleteUser, getParkings, getParking, editParking, deleteParking, addParking, getParea, getPareaById, addParea, editParea, deleteParea, getCars, getCar, addCar, editCar, deleteCar };
+export { getUsers, getUser, addUser, editUser, deleteUser, getParkings, getParking, editParking, deleteParking, addParking, getParea, getPareaById, addParea, editParea, deleteParea, getCars, getCar, getCarByUserId, addCar, editCar, deleteCar };
