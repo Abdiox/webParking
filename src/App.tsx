@@ -9,7 +9,9 @@ import MyParkings from "./pages/MyParkings";
 import Profile from "./pages/Profile";
 import { ParkingAreas } from "./pages/ParkingAreas";
 import { MyCars } from "./pages/MyCars";
+import { History } from "./pages/History";
 import { ContactUs } from "./pages/ContactUs";
+
 import "./App.css";
 
 function App() {
@@ -25,6 +27,8 @@ function App() {
         <Route path="/parking-areas" element={<ParkingAreas />} />
         <Route path="/create-parking" element={<CreateParking />} />
         <Route path="/my-cars" element={<MyCars />} />
+        <Route path="/history" element={<History />} />
+
         
         <Route path="/contact-us" element={<ContactUs />} />
         

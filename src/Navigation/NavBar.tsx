@@ -66,6 +66,14 @@ const NavBar: React.FC = () => {
             <span>Mine Køretøjer</span>
           </NavLink>
 
+          <NavLink 
+            to="/history" 
+            className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+          >
+            <span className="icon">📜</span>
+            <span>Historik</span>
+          </NavLink>
+
           
 
           <NavLink 

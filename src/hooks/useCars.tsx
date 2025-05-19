@@ -34,7 +34,6 @@ export function useCars() {
     fetchCars();
   }, []);
 
-  // Log cars whenever they change
   useEffect(() => {
     console.log("Cars in state:", cars);
   }, [cars]);
