@@ -1,6 +1,6 @@
 import { createContext, useState, ReactNode } from "react";
 import { useContext } from "react";
-import type { LoginResponse, LoginRequest } from "../services/authFacade";
+import { authProvider, type LoginRequest, type LoginResponse } from "../services/authFacade";
 
 interface AuthContextType {
   signIn: (user: LoginRequest) => Promise<LoginResponse>;
@@ -14,36 +14,54 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const useAuth = () => {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
 };
 
 export default function AuthProvider({ children }: { children: ReactNode }) {
   const initialEmail = localStorage.getItem("email") || null;
   const [email, setEmail] = useState<string | null>(initialEmail);
 
-  const signIn = async (user_: LoginRequest) => {
-    return { email: "sample", token: "sampletoken", roles: ["user"] };
+  const signIn = async (credentials: LoginRequest) => {
+    try {
+      const response = await authProvider.signIn(credentials);
+      
+      localStorage.setItem("token", response.token);
+      localStorage.setItem("email", response.email);
+      
+      setEmail(response.email);
+      return response;
+    } catch (error) {
+      console.error("Login failed:", error);
+      throw error;
+    }
   };
-
+  
   const signOut = () => {
     setEmail(null);
     localStorage.removeItem("token");
     localStorage.removeItem("email");
-    localStorage.removeItem("roles");
+    localStorage.removeItem("role");
+    localStorage.removeItem("userId");
   };
 
   const isLoggedIn = () => {
-    return email != null;
+    return localStorage.getItem("token") !== null;
   };
 
-  const isLoggedInAs = (role: string[]) => {
-    const roles: Array<string> = JSON.parse(localStorage.getItem("roles") || "[]");
-    return roles.some((r) => role.includes(r));
+  const isLoggedInAs = (requiredRoles: string[]) => {
+    const userRole = localStorage.getItem("role");
+    if (!userRole) return false;
+    
+    return requiredRoles.includes(userRole);
   };
-
+  
   const isAdmin = () => {
-    const roles: Array<string> = JSON.parse(localStorage.getItem("roles") || "[]");
-    return roles.includes("ADMIN");
+    const role = localStorage.getItem("role");
+    return role === "ADMIN";
   };
 
   return <AuthContext.Provider value={{ signIn, signOut, isLoggedIn, isLoggedInAs, isAdmin, email }}>{children}</AuthContext.Provider>;

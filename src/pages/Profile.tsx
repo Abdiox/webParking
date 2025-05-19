@@ -11,11 +11,8 @@ const Profile: React.FC = () => {
   if (error) return <p style={{ color: "red" }}>{error}</p>;
   if (!user) return null;
 
-  console.log(user.firstName);
-  console.log(user.lastName);
-  console.log(user.email);
-  console.log(user.phoneNumber);
-  console.log(user.adress);
+ 
+  
 
 
   return (

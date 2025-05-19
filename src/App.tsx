@@ -1,4 +1,3 @@
-// App.jsx - Med alle beskyttede routes og login som standardrute
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/partials/Layout";
@@ -37,17 +36,17 @@ function App() {
             <Route path="/history" element={<History />} />
             <Route path="/profile" element={<Profile />} />
             
-
-
-
-            {/* Admin routes */}
-            <Route path="/admin" element={<h1>Admin Page</h1>} />
-            <Route path="/admin/user-overview" element={<UserOverview />} />
-            
-            <Route element={<ProtectedRoute requiredRoles={["ADMIN"]} />}>
-            </Route>
-            
+            {/* Admin routes should be OUTSIDE the Layout route but inside their own ProtectedRoute */}
             <Route index element={<Navigate to="/home" replace />} />
+          </Route>
+        </Route>
+
+        {/* Admin routes with their own ProtectedRoute wrapper with ADMIN role check */}
+        <Route element={<ProtectedRoute requiredRoles={["ADMIN"]} />}>
+          <Route path="/admin" element={<Layout />}>
+            <Route index element={<h1>Admin Dashboard</h1>} />
+            <Route path="users" element={<UserOverview />} />
+            <Route path="parkings" element={<h1>All Parkings</h1>} />
           </Route>
         </Route>
 

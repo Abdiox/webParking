@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { authProvider, type LoginRequest } from "../services/authFacade";
-import { getUsers, getUser } from "../services/apiFacade";
+import { useAuth } from "../security/AuthProvider";
+import { getUsers } from "../services/apiFacade";
 import LoginForm from "../forms/LoginForm";
+import type { LoginRequest } from "../services/authFacade";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const auth = useAuth();
   const [credentials, setCredentials] = useState<LoginRequest>({ email: "", password: "" });
   const [error, setError] = useState<string | null>(null);
 
@@ -13,40 +15,50 @@ const Login: React.FC = () => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  try {
+    localStorage.removeItem("userId");
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    localStorage.removeItem("role");
+    
+    const res = await auth.signIn(credentials);
+    
     try {
-      localStorage.removeItem("userId");
-      localStorage.removeItem("token");
-      localStorage.removeItem("email");
+      const allUsers = await getUsers();
+      console.log("All users:", allUsers);
       
-      const res = await authProvider.signIn(credentials);
-      localStorage.setItem("token", res.token);
-      localStorage.setItem("email", res.email);
+      const currentUser = allUsers.find(user => user.email === res.email);
       
-      try {
-        const allUsers = await getUsers();
-        console.log("Alle brugere:", allUsers);
+      if (currentUser) {
+        localStorage.setItem("userId", currentUser.id.toString());
+        console.log("User ID saved:", currentUser.id);
+        console.log("User role from backend:", currentUser.role);
         
-        const currentUser = allUsers.find(user => user.email === res.email);
+        localStorage.setItem("role", currentUser.role);
         
-        if (currentUser) {
-          localStorage.setItem("userId", currentUser.id.toString());
-          console.log("User ID gemt:", currentUser.id);
-        } else {
-          console.error("Kunne ikke finde bruger med email:", res.email);
-        }
-      } catch (userErr) {
-        console.error("Fejl ved hentning af bruger-id:", userErr);
+        console.log("User data in localStorage:", {
+          userId: localStorage.getItem("userId"),
+          email: localStorage.getItem("email"),
+          token: localStorage.getItem("token") ? "exists" : "missing",
+          role: localStorage.getItem("role")
+        });
+      } else {
+        console.error("Could not find user with email:", res.email);
       }
-      
-      authProvider.isAuthenticated = true;
-      window.location.href = "/home";
-      
-    } catch (err: any) {
-      setError(err.message || "Login failed");
+    } catch (userErr) {
+      console.error("Error fetching user ID:", userErr);
     }
-  };
+    
+    window.location.href = "/home";
+    
+  } catch (err: any) {
+    setError(err.message || "Login failed");
+  }
+};
+
 
   return (
     <div style={{ maxWidth: 400, margin: "auto" }}>

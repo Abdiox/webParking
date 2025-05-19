@@ -10,9 +10,16 @@ interface Props {
 const NavBar: React.FC<Props> = ({user}) => {
   const navigate = useNavigate();
   
-  const isAdmin = () => {
-    return user && user.roles && user.roles.includes("ADMIN");
-  };
+const isAdmin = () => {
+  console.log("Checking admin status:", {
+    userObject: user,
+    userRole: user?.role,
+    roleInLocalStorage: localStorage.getItem("role")
+  });
+  
+  return user && user.role === "ADMIN";
+};
+
 
   const handleLogout = () => {
     localStorage.clear();
@@ -103,7 +110,6 @@ const NavBar: React.FC<Props> = ({user}) => {
             <span>Kontakt Os</span>
           </NavLink>
           
-          {/* Admin Section - Only visible to admins */}
           {isAdmin() && (
             <>
               <div className="nav-section-divider">

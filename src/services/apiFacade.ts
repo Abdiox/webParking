@@ -6,12 +6,7 @@ const PAREA_URL = API_URL + "/pArea";
 const CARS_URL = API_URL + "/cars";
 
 
-enum Roles {
-  "Admin" = "ADMIN",
-  "User" = "USER",
-  "PVAGT" = "PVAGT",  
-
-}
+type Roles = "PVAGT" | "ADMIN" | "USER";
 
 
 export interface UserDetails {
@@ -25,6 +20,7 @@ export interface UserDetails {
     adress: string;
     city: string;
     zipCode: number;
+    role: Roles | null;
   };
 
 export interface Parea {
