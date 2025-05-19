@@ -1,9 +1,15 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import type { UserDetails } from "../services/apiFacade";
 import "./NavBar.css";
 
-const NavBar: React.FC = () => {
+interface Props {
+  user: UserDetails;
+}
+
+const NavBar: React.FC<Props> = ({user}) => {
   const navigate = useNavigate();
+  
 
   const handleLogout = () => {
     localStorage.clear();
@@ -25,6 +31,13 @@ const NavBar: React.FC = () => {
         <div className="app-title">
           <h2>PARKING</h2>
         </div>
+
+
+        <div className="user-info">
+         
+        {user ? `Velkommen, ${user.firstName}` : 'Velkommen'}
+        </div>
+        
 
         <div className="nav-links">
           <NavLink 
