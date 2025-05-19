@@ -10,6 +10,9 @@ interface Props {
 const NavBar: React.FC<Props> = ({user}) => {
   const navigate = useNavigate();
   
+  const isAdmin = () => {
+    return user && user.roles && user.roles.includes("ADMIN");
+  };
 
   const handleLogout = () => {
     localStorage.clear();
@@ -32,13 +35,10 @@ const NavBar: React.FC<Props> = ({user}) => {
           <h2>PARKING</h2>
         </div>
 
-
         <div className="user-info">
-         
-        {user ? `Velkommen, ${user.firstName}` : 'Velkommen'}
+          {user ? `Velkommen, ${user.firstName}` : 'Velkommen'}
         </div>
         
-
         <div className="nav-links">
           <NavLink 
             to="/" 
@@ -87,8 +87,6 @@ const NavBar: React.FC<Props> = ({user}) => {
             <span>Historik</span>
           </NavLink>
 
-          
-
           <NavLink 
             to="/profile" 
             className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
@@ -104,6 +102,29 @@ const NavBar: React.FC<Props> = ({user}) => {
             <span className="icon">✉️</span>
             <span>Kontakt Os</span>
           </NavLink>
+          
+          {/* Admin Section - Only visible to admins */}
+          {isAdmin() && (
+            <>
+              <div className="nav-section-divider">
+                <span>Admin</span>
+              </div>
+              <NavLink 
+                to="/admin/users" 
+                className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+              >
+                <span className="icon">👥</span>
+                <span>Brugeroversigt</span>
+              </NavLink>
+              <NavLink 
+                to="/admin/parkings" 
+                className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+              >
+                <span className="icon">🚘</span>
+                <span>Alle Parkeringer</span>
+              </NavLink>
+            </>
+          )}
         </div>
 
         <div className="logout-container">

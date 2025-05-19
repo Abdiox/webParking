@@ -22,7 +22,6 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
   const [email, setEmail] = useState<string | null>(initialEmail);
 
   const signIn = async (user_: LoginRequest) => {
-    // Din login-funktionalitet her
     return { email: "sample", token: "sampletoken", roles: ["user"] };
   };
 

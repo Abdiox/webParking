@@ -1,0 +1,95 @@
+.user-overview-container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    max-width: 1200px;
+    margin: 20px auto;
+    transition: transform 0.3s ease;
+  }
+  
+  .user-overview-header {
+    color: #2c3e50;
+    font-size: 28px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #3498db;
+    text-align: center;
+  }
+  
+  .users-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+  
+  .users-table th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+    text-align: left;
+    padding: 14px 16px;
+    border-bottom: 2px solid #3498db;
+    font-size: 14px;
+  }
+  
+  .users-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #eaeaea;
+    color: #444;
+    font-size: 14px;
+  }
+  
+  .users-table tr:hover {
+    background-color: #f5f9fc;
+  }
+  
+  .users-table tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .loading-message {
+    text-align: center;
+    padding: 20px;
+    font-size: 16px;
+    color: #6c757d;
+  }
+  
+  .error-message {
+    text-align: center;
+    padding: 15px;
+    color: #e74c3c;
+    background-color: #fdedec;
+    border-radius: 5px;
+    margin: 20px 0;
+  }
+  
+  @media (max-width: 992px) {
+    .user-overview-container {
+      padding: 20px;
+      margin: 15px;
+    }
+    
+    .users-table {
+      display: block;
+      overflow-x: auto;
+    }
+    
+    .user-overview-header {
+      font-size: 24px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .user-overview-header {
+      font-size: 22px;
+    }
+    
+    .users-table th,
+    .users-table td {
+      padding: 10px 12px;
+      font-size: 13px;
+    }
+  }
+  

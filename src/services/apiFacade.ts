@@ -6,6 +6,13 @@ const PAREA_URL = API_URL + "/pArea";
 const CARS_URL = API_URL + "/cars";
 
 
+enum Roles {
+  "Admin" = "ADMIN",
+  "User" = "USER",
+  "PVAGT" = "PVAGT",  
+
+}
+
 
 export interface UserDetails {
     id: number | null;
