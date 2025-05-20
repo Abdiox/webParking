@@ -21,6 +21,15 @@ const isAdmin = () => {
 };
 
 
+const isUser = () => {
+  console.log("Checking user status:", {
+    userObject: user,
+    userRole: user?.role,
+    roleInLocalStorage: localStorage.getItem("role")
+  });
+  return user && user.role === "USER";
+};
+
   const handleLogout = () => {
     localStorage.clear();
     window.location.href = "/login";
@@ -43,8 +52,15 @@ const isAdmin = () => {
         </div>
 
         <div className="user-info">
+          <img 
+            src="https://openclipart.org/download/247319/abstract-user-flat-3.svg" 
+            alt="User Avatar" 
+            className="user-avatar"
+          />
           {user ? `Velkommen, ${user.firstName}` : 'Velkommen'}
         </div>
+
+        {isUser() && (
         
         <div className="nav-links">
           <NavLink 
@@ -109,6 +125,8 @@ const isAdmin = () => {
             <span className="icon">✉️</span>
             <span>Kontakt Os</span>
           </NavLink>
+        </div>
+        )}
           
           {isAdmin() && (
             <>
@@ -133,6 +151,7 @@ const isAdmin = () => {
           )}
         </div>
 
+
         <div className="logout-container">
           <button className="logout-btn" onClick={handleLogout}>
             <span className="icon">🚪</span>
@@ -140,8 +159,9 @@ const isAdmin = () => {
           </button>
         </div>
       </div>
-    </div>
+
   );
 };
+
 
 export default NavBar;
