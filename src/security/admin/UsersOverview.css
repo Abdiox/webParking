@@ -16,6 +16,17 @@
     border-bottom: 2px solid #3498db;
     text-align: center;
   }
+
+  .user-delete-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s ease;
+  }
   
   .users-table {
     width: 100%;

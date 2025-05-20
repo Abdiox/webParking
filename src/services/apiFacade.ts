@@ -99,6 +99,7 @@ async function deleteUser(id: number): Promise<void> {
 
   const response = await fetch(USERS_URL + "/" + id, options);
    console.log("Response from deleteUser:", response);
+   
   if (!response.ok) {
     throw new Error(`Failed to delete user with status: ${response.status}`);
   }
