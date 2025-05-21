@@ -1,106 +1,112 @@
 .user-overview-container {
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    padding: 30px;
-    max-width: 1200px;
-    margin: 20px auto;
-    transition: transform 0.3s ease;
-  }
-  
-  .user-overview-header {
-    color: #2c3e50;
-    font-size: 28px;
-    margin-bottom: 25px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #3498db;
-    text-align: center;
-  }
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 30px;
+  max-width: 1200px;
+  margin: 20px auto;
+  transition: transform 0.3s ease;
+  position: absolute;
+  top: 5%;
+  left: 30%;
+}
 
-  .user-delete-button {
-    background-color: #e74c3c;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.2s ease;
-  }
-  
-  .users-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  }
-  
-  .users-table th {
-    background-color: #f8f9fa;
-    color: #495057;
-    font-weight: 600;
-    text-align: left;
-    padding: 14px 16px;
-    border-bottom: 2px solid #3498db;
-    font-size: 14px;
-  }
-  
-  .users-table td {
-    padding: 12px 16px;
-    border-bottom: 1px solid #eaeaea;
-    color: #444;
-    font-size: 14px;
-  }
-  
-  .users-table tr:hover {
-    background-color: #f5f9fc;
-  }
-  
-  .users-table tr:last-child td {
-    border-bottom: none;
-  }
-  
-  .loading-message {
-    text-align: center;
+.user-overview-container h1 {
+  color: #2c3e50;
+  font-size: 28px;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #3498db;
+  text-align: center;
+}
+
+.user-delete-button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s ease;
+}
+
+.user-delete-button:hover {
+  background-color: #c0392b;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.user-table th {
+  background-color: #f8f9fa;
+  color: #495057;
+  font-weight: 600;
+  text-align: left;
+  padding: 14px 16px;
+  border-bottom: 2px solid #3498db;
+  font-size: 14px;
+}
+
+.user-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eaeaea;
+  color: #444;
+  font-size: 14px;
+}
+
+.user-table tr:hover {
+  background-color: #f5f9fc;
+}
+
+.user-table tr:last-child td {
+  border-bottom: none;
+}
+
+.loading-message {
+  text-align: center;
+  padding: 20px;
+  font-size: 16px;
+  color: #6c757d;
+}
+
+.error-message {
+  text-align: center;
+  padding: 15px;
+  color: #e74c3c;
+  background-color: #fdedec;
+  border-radius: 5px;
+  margin: 20px 0;
+}
+
+@media (max-width: 992px) {
+  .user-overview-container {  
     padding: 20px;
-    font-size: 16px;
-    color: #6c757d;
+    margin: 15px;
+    left: 0;
+    right: 0;
+    position: relative;
   }
   
-  .error-message {
-    text-align: center;
-    padding: 15px;
-    color: #e74c3c;
-    background-color: #fdedec;
-    border-radius: 5px;
-    margin: 20px 0;
+  .user-table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 576px) {
+  .user-overview-container h1 { 
+    font-size: 22px;
   }
   
-  @media (max-width: 992px) {
-    .user-overview-container {
-      padding: 20px;
-      margin: 15px;
-    }
-    
-    .users-table {
-      display: block;
-      overflow-x: auto;
-    }
-    
-    .user-overview-header {
-      font-size: 24px;
-    }
+  .user-table th,
+  .user-table td {
+    padding: 10px 12px;
+    font-size: 13px;
   }
-  
-  @media (max-width: 576px) {
-    .user-overview-header {
-      font-size: 22px;
-    }
-    
-    .users-table th,
-    .users-table td {
-      padding: 10px 12px;
-      font-size: 13px;
-    }
-  }
-  
+}
+

@@ -1,6 +1,10 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/partials/Layout";
+
+/**  User views **/
+
+
 import Home from "./pages/Home";
 import Login from "./security/Login";
 import Register from "./security/Register";
@@ -12,7 +16,11 @@ import { MyCars } from "./pages/MyCars";
 import { History } from "./pages/History";
 import { ContactUs } from "./pages/ContactUs";
 
+
+/**  Admin views **/
+
 import UserOverview from "./security/admin/UserOverview";
+import AdminParkingOverview from "./security/admin/AdminParkingOverview";
 import ProtectedRoute from "./security/ProtectedRoute";
 import AuthProvider from "./security/AuthProvider";
 
@@ -36,17 +44,15 @@ function App() {
             <Route path="/history" element={<History />} />
             <Route path="/profile" element={<Profile />} />
             
-            {/* Admin routes should be OUTSIDE the Layout route but inside their own ProtectedRoute */}
             <Route index element={<Navigate to="/home" replace />} />
           </Route>
         </Route>
 
-        {/* Admin routes with their own ProtectedRoute wrapper with ADMIN role check */}
         <Route element={<ProtectedRoute requiredRoles={["ADMIN"]} />}>
           <Route path="/admin" element={<Layout />}>
             <Route index element={<h1>Admin Dashboard</h1>} />
             <Route path="users" element={<UserOverview />} />
-            <Route path="parkings" element={<h1>All Parkings</h1>} />
+            <Route path="parkings" element={<AdminParkingOverview /> } />
           </Route>
         </Route>
 

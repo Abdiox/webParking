@@ -43,12 +43,12 @@ const isUser = () => {
           alt="AM Parking Logo" 
           className="app-logo" 
         />
-        <span className="app-title-small">AM</span>
+        <span className="app-title-small">AM PARKING</span>
       </div>
 
       <div className="sidebar">
         <div className="app-title">
-          <h2>PARKING</h2>
+          <h2>Parkering</h2>
         </div>
 
         <div className="user-info">
