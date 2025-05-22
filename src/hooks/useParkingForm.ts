@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { addParking, getParea } from "../services/apiFacade";
 import type { Parking, Parea } from "../services/apiFacade";
 import { useNavigate } from "react-router-dom";
+import { usePAreaValidation } from "./usePAreaValidation";
 
 const EMPTY_PARKING: Parking = {
   id: null,
@@ -23,40 +24,58 @@ export function useParkingForm() {
   const [parking, setParking] = useState<Parking>({ ...EMPTY_PARKING });
   const [userId, setUserId] = useState<number | null>(null);
   const [areas, setAreas] = useState<Parea[]>([]);
+  const [selectedArea, setSelectedArea] = useState<Parea | null>(null);
+  const { daysError, isValid, validateParking } = usePAreaValidation(selectedArea);
 
-  // Hent p-områder og bruger-id
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
     if (storedUserId) setUserId(Number(storedUserId));
     getParea().then(setAreas);
   }, []);
 
-  // Håndter form input
+  // Valider når parking ændres
+  useEffect(() => {
+    if (parking.parea?.id && parking.startTime && parking.endTime) {
+      validateParking(parking);
+    }
+  }, [parking, validateParking]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
 
-    if (name === "pArea") {
-      const selectedArea = areas.find((area) => area.areaName === value);
-      if (selectedArea) {
+    if (name === "parea") {
+      const areaId = Number(value);
+      const area = areas.find((a) => a.id === areaId);
+      
+      if (area) {
+        setSelectedArea(area);
         setParking((prev) => ({
           ...prev,
-          parea: selectedArea,
+          parea: area,
         }));
       }
     } else {
       setParking((prev) => ({
         ...prev,
         [name]: name === "userId" ? Number(value) : value,
-        userId: userId!,
+        userId: userId || 0,
       }));
     }
   };
 
-  // Håndter form submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Valider eksplicit én sidste gang før submission
+    const valid = validateParking(parking);
+    
+    if (!valid) {
+      alert("Parkeringsperioden er ikke gyldig. " + (daysError || ""));
+      return;
+    }
+    
     try {
-      const parkingToSubmit = { ...parking, userId: userId! };
+      const parkingToSubmit = { ...parking, userId: userId || 0 };
       await addParking(parkingToSubmit);
       alert("Parkering oprettet!");
       navigate("/home");
@@ -71,5 +90,7 @@ export function useParkingForm() {
     areas,
     handleChange,
     handleSubmit,
+    daysError,
+    isValid
   };
 }

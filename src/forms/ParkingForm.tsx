@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import type { Parking, Parea } from "../services/apiFacade";
 import { useCarLookUp } from "../hooks/useCarLookUp";
+import { usePAreaValidation } from "../hooks/usePAreaValidation";
 import "./RegistrationForm.css"; 
 
 interface RegistrationFormProps {
@@ -13,6 +14,8 @@ interface RegistrationFormProps {
 export default function RegistrationForm({ parking, areas, onChange, onSubmit }: RegistrationFormProps) {
   const now = new Date().toISOString().slice(0, 16);
   const { carDetails, isLoading, error, lookupCar } = useCarLookUp();
+  const [selectedArea, setSelectedArea] = useState<Parea | null>(null);
+  const [maxEndDate, setMaxEndDate] = useState<string>("");
   
   const handlePlateNumberBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
     const plateNumber = e.target.value.trim();
@@ -23,25 +26,72 @@ export default function RegistrationForm({ parking, areas, onChange, onSubmit }:
 
   const handleAreaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedAreaId = Number(e.target.value);
-    const selectedArea = areas.find(area => area.id === selectedAreaId);
-    if (selectedArea) {
-      parking.parea = selectedArea;
+    const area = areas.find(a => a.id === selectedAreaId);
+    
+    if (area) {
+      setSelectedArea(area);
+      // Nulstil slutdato når området ændres
+      if (parking.startTime) {
+        updateMaxEndDate(parking.startTime, area.daysAllowedParking);
+      }
     }
+    
+    onChange(e);
   };
+  
+  const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newStartDate = e.target.value;
+    
+    // Opdater max end date baseret på ny startdato
+    if (selectedArea) {
+      updateMaxEndDate(newStartDate, selectedArea.daysAllowedParking);
+    }
+    
+    onChange(e);
+  };
+  
+  const updateMaxEndDate = (startDateStr: string, maxDays: number) => {
+    if (!startDateStr) return;
+    
+    const startDate = new Date(startDateStr);
+    const maxDate = new Date(startDate);
+    maxDate.setDate(startDate.getDate() + maxDays);
+    
+    // Konverter til format som datetime-local kan bruge
+    setMaxEndDate(maxDate.toISOString().slice(0, 16));
+  };
+  
+  useEffect(() => {
+    if (parking.parea?.id) {
+      const area = areas.find(a => a.id === parking.parea.id);
+      if (area) {
+        setSelectedArea(area);
+        if (parking.startTime) {
+          updateMaxEndDate(parking.startTime, area.daysAllowedParking);
+        }
+      }
+    }
+  }, [parking.parea?.id, areas, parking.startTime]);
   
   return (
     <div className="parking-form-container">
       <form onSubmit={onSubmit} className="parking-form">
         <h2>Registrer Parkering</h2>
         
-       
-
         <div className="form-group">
-          <label htmlFor="area">Område:</label>
-          <select id="area" name="area" onChange={handleAreaChange} required>
-            <option value="">Vælg område</option>
-            {areas.map(area => (
-              <option key={area.id} value={area.id}>{area.areaName}</option>
+          <label htmlFor="parea">Parkeringsområde:</label>
+          <select 
+            id="parea"
+            name="parea" 
+            value={parking.parea?.id || ""} 
+            onChange={handleAreaChange} 
+            required
+          >
+            <option value="">-- Vælg område --</option>
+            {areas.map((a) => (
+              <option key={a.id} value={a.id || 0}>
+                {a.areaName} ({a.city}, {a.postalCode}) - Max {a.daysAllowedParking} dage
+              </option>
             ))}
           </select>
         </div>
@@ -85,7 +135,7 @@ export default function RegistrationForm({ parking, areas, onChange, onSubmit }:
               </div>
               <div className="car-info-item">
                 <span>Vægt:</span>
-                <span>{carDetails.total_weight} kg</span>
+                <span>{carDetails.totalWeight} kg</span>
               </div>
               <div className="car-info-item">
                 <span>Type:</span>
@@ -102,10 +152,15 @@ export default function RegistrationForm({ parking, areas, onChange, onSubmit }:
             name="startTime" 
             type="datetime-local" 
             value={parking.startTime} 
-            onChange={onChange} 
+            onChange={handleStartDateChange} 
             required 
             min={now} 
           />
+          {selectedArea && (
+            <div className="input-info">
+              Vælg starttidspunkt for din parkering
+            </div>
+          )}
         </div>
         
         <div className="form-group">
@@ -117,12 +172,21 @@ export default function RegistrationForm({ parking, areas, onChange, onSubmit }:
             value={parking.endTime} 
             onChange={onChange} 
             required 
-            min={now} 
+            min={parking.startTime || now}
+            max={maxEndDate || undefined}
           />
+          {selectedArea && parking.startTime && (
+            <div className="input-info">
+              Maks. {selectedArea.daysAllowedParking} dage fra starttidspunktet
+            </div>
+          )}
         </div>
         
         <div className="form-group button-group">
-          <button type="submit" disabled={!carDetails && parking.plateNumber.length > 0}>
+          <button 
+            type="submit" 
+            disabled={!carDetails && parking.plateNumber.length > 0}
+          >
             {!carDetails && parking.plateNumber.length > 0 ? "Find bil først" : "Opret Parkering"}
           </button>
         </div>
