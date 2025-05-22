@@ -131,7 +131,7 @@ export default function RegistrationForm({ parking, areas, onChange, onSubmit }:
               </div>
               <div className="car-info-item">
                 <span>Vægt:</span>
-                <span>{carDetails.totalWeight} kg</span>
+                <span>{carDetails.total_weight} kg</span>
               </div>
               <div className="car-info-item">
                 <span>Type:</span>
