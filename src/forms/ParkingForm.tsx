@@ -20,26 +20,28 @@ export default function RegistrationForm({ parking, areas, onChange, onSubmit }:
       await lookupCar(plateNumber);
     }
   };
+
+  const handleAreaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedAreaId = Number(e.target.value);
+    const selectedArea = areas.find(area => area.id === selectedAreaId);
+    if (selectedArea) {
+      parking.parea = selectedArea;
+    }
+  };
   
   return (
     <div className="parking-form-container">
       <form onSubmit={onSubmit} className="parking-form">
         <h2>Registrer Parkering</h2>
         
+       
+
         <div className="form-group">
-          <label htmlFor="parea">Parkeringsområde:</label>
-          <select 
-            id="parea"
-            name="parea" 
-            value={parking.parea?.id || ""} 
-            onChange={onChange} 
-            required
-          >
-            <option value="">-- Vælg område --</option>
-            {areas.map((a) => (
-              <option key={a.id} value={a.id || 0}>
-                {a.areaName} ({a.city}, {a.postalCode})
-              </option>
+          <label htmlFor="area">Område:</label>
+          <select id="area" name="area" onChange={handleAreaChange} required>
+            <option value="">Vælg område</option>
+            {areas.map(area => (
+              <option key={area.id} value={area.id}>{area.areaName}</option>
             ))}
           </select>
         </div>
@@ -67,7 +69,7 @@ export default function RegistrationForm({ parking, areas, onChange, onSubmit }:
             <div className="car-info-grid">
               <div className="car-info-item">
                 <span>Mærke:</span>
-                <span>{carDetails.brand}</span>
+                <span>{carDetails.make}</span>
               </div>
               <div className="car-info-item">
                 <span>Model:</span>
@@ -75,11 +77,15 @@ export default function RegistrationForm({ parking, areas, onChange, onSubmit }:
               </div>
               <div className="car-info-item">
                 <span>Årgang:</span>
-                <span>{carDetails.year}</span>
+                <span>{carDetails.modelYear}</span>
               </div>
               <div className="car-info-item">
                 <span>Farve:</span>
                 <span>{carDetails.color}</span>
+              </div>
+              <div className="car-info-item">
+                <span>Vægt:</span>
+                <span>{carDetails.total_weight} kg</span>
               </div>
               <div className="car-info-item">
                 <span>Type:</span>

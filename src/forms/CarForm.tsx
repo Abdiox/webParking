@@ -43,7 +43,7 @@ const CarForm: React.FC<CarFormProps> = ({ onCarAdded }) => {
         modelYear: carDetails.modelYear || 0,
         color: carDetails.color || "",
         type: carDetails.type || "",
-        total_weight: carDetails.total_weight || 0,
+        total_weight: carDetails.total_weight,
         description: description,
         userId: Number(localStorage.getItem("userId")) || null
       };

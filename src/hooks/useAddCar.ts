@@ -21,7 +21,7 @@ export function useAddCar() {
         modelYear: car.modelYear,
         color: car.color,
         type: car.type,
-        totalWeight: car.totalWeight,
+        total_weight: car.total_weight,
         description: car.description,
         userId: car.userId
       };
