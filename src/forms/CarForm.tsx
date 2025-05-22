@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { addCar } from "../services/apiFacade";
+import type { Car } from '../services/apiFacade';
 import { useCarLookUp } from "../hooks/useCarLookUp";
-import type { Car } from "../services/apiFacade";
+import { useAddCar } from "../hooks/useAddCar";
 import "./CarForm.css"; 
 
 interface CarFormProps {
@@ -11,17 +11,16 @@ interface CarFormProps {
 const CarForm: React.FC<CarFormProps> = ({ onCarAdded }) => {
   const [plateNumber, setPlateNumber] = useState("");
   const [description, setDescription] = useState("");
-  const [saving, setSaving] = useState(false);
-  const [saveError, setSaveError] = useState<string | null>(null);
-  const [saveSuccess, setSaveSuccess] = useState(false);
   
-  const { carDetails, isLoading, error, lookupCar, resetCarDetails } = useCarLookUp();
+  const { carDetails, isLoading, error: lookupError, lookupCar, resetCarDetails } = useCarLookUp();
+  const { saveCar, isAdding, error: saveError, success, resetState } = useAddCar();
 
   const handlePlateNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPlateNumber(e.target.value.toUpperCase());
     if (carDetails) {
       resetCarDetails();
     }
+    resetState();
   };
 
   const handleLookupCar = async (e: React.FormEvent) => {
@@ -35,9 +34,6 @@ const CarForm: React.FC<CarFormProps> = ({ onCarAdded }) => {
     e.preventDefault();
     if (!carDetails) return;
     
-    setSaving(true);
-    setSaveError(null);
-    
     try {
       const newCar: Car = {
         id: null,
@@ -47,31 +43,29 @@ const CarForm: React.FC<CarFormProps> = ({ onCarAdded }) => {
         modelYear: carDetails.modelYear || 0,
         color: carDetails.color || "",
         type: carDetails.type || "",
-        totalWeight: carDetails.totalWeight || 0,
+        total_weight: carDetails.total_weight || 0,
         description: description,
         userId: Number(localStorage.getItem("userId")) || null
       };
       
-      const savedCar = await addCar(newCar);
-      setSaveSuccess(true);
+      const savedCar = await saveCar(newCar);
       
-      setPlateNumber("");
-      setDescription("");
-      resetCarDetails();
-      
-      if (onCarAdded) {
+      if (savedCar && onCarAdded) {
         onCarAdded(savedCar);
       }
       
-      setTimeout(() => {
-        setSaveSuccess(false);
-      }, 3000);
+      if (success) {
+        setPlateNumber("");
+        setDescription("");
+        resetCarDetails();
+        
+        setTimeout(() => {
+          resetState();
+        }, 3000);
+      }
       
-    } catch (error: any) {
-      console.error("Fejl ved oprettelse af bil:", error);
-      setSaveError(error.message || "Der opstod en fejl ved oprettelse af bilen");
-    } finally {
-      setSaving(false);
+    } catch (error) {
+      console.error("Fejl i formular:", error);
     }
   };
 
@@ -100,7 +94,7 @@ const CarForm: React.FC<CarFormProps> = ({ onCarAdded }) => {
               {isLoading ? "Søger..." : "Find bil"}
             </button>
           </div>
-          {error && <p className="error-message">{error}</p>}
+          {lookupError && <p className="error-message">{lookupError}</p>}
         </div>
       </form>
       
@@ -131,7 +125,7 @@ const CarForm: React.FC<CarFormProps> = ({ onCarAdded }) => {
               </div>
               <div className="car-info-item">
                 <span>Vægt:</span>
-                <span>{carDetails.total_weight} kg</span>
+                <span>{carDetails.totalWeight} kg</span>
               </div>
             </div>
           </div>
@@ -151,14 +145,14 @@ const CarForm: React.FC<CarFormProps> = ({ onCarAdded }) => {
             <button 
               type="submit" 
               className="save-button"
-              disabled={saving}
+              disabled={isAdding}
             >
-              {saving ? "Gemmer..." : "Gem Bil"}
+              {isAdding ? "Gemmer..." : "Gem Bil"}
             </button>
           </div>
           
           {saveError && <p className="error-message">{saveError}</p>}
-          {saveSuccess && <p className="success-message">Bilen blev tilføjet!</p>}
+          {success && <p className="success-message">Bilen blev tilføjet!</p>}
         </form>
       )}
     </div>

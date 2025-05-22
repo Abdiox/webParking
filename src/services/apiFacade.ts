@@ -255,7 +255,7 @@ async function deleteCar(id: number): Promise<void> {
         method: "GET",
         headers: {
             "X-AUTH-TOKEN": "unq3bj96qz7umcabu3qtfqnu2okjsadn",
-            // Fjernet "Content-Type": "application/json" for at undgå CORS fejl
+            
         },
     };
     return fetch('https://v1.motorapi.dk/vehicles/' + plateNumber, options).then(handleHttpErrors);
