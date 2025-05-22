@@ -1,0 +1,168 @@
+/* CarForm.css */
+.car-form-container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    max-width: 600px;
+    margin: 20px auto;
+  }
+  
+  .car-form-container h2 {
+    color: #2c3e50;
+    font-size: 28px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #3498db;
+    text-align: center;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #444;
+  }
+  
+  .plate-input-container {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .plate-input-container input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  
+  .lookup-button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 0 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+  }
+  
+  .lookup-button:hover {
+    background-color: #2980b9;
+  }
+  
+  .lookup-button:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+  }
+  
+  .car-details {
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 15px 0;
+    border-left: 4px solid #3498db;
+  }
+  
+  .car-details h3 {
+    margin-top: 0;
+    color: #2c3e50;
+    font-size: 1.1em;
+    margin-bottom: 10px;
+  }
+  
+  .car-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  .car-info-item {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .car-info-item span:first-child {
+    font-weight: bold;
+    color: #555;
+  }
+  
+  .car-info-item span:last-child {
+    color: #333;
+  }
+  
+  textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    resize: vertical;
+  }
+  
+  .button-group {
+    margin-top: 24px;
+    text-align: center;
+  }
+  
+  .save-button {
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 16px;
+    transition: background-color 0.2s;
+  }
+  
+  .save-button:hover {
+    background-color: #219653;
+  }
+  
+  .save-button:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+  }
+  
+  .error-message {
+    color: #e74c3c;
+    padding: 10px;
+    background-color: #ffeaea;
+    border-radius: 4px;
+    margin-top: 15px;
+  }
+  
+  .success-message {
+    color: #27ae60;
+    padding: 10px;
+    background-color: #e6ffee;
+    border-radius: 4px;
+    margin-top: 15px;
+  }
+  
+  /* Responsivt design */
+  @media (max-width: 600px) {
+    .car-form-container {
+      padding: 16px;
+    }
+    
+    .car-info-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .plate-input-container {
+      flex-direction: column;
+    }
+    
+    .lookup-button {
+      padding: 12px;
+    }
+  }
+  

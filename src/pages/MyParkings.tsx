@@ -1,6 +1,6 @@
 import React from "react";
 import { useUserParkings } from "../hooks/useUserParkings";
-import UserParkingList from "../components/UserParkingList";
+import UserParkingList from "../components/lists/UserParkingList"
 
 export const MyParkings: React.FC = () => {
   const { parkings, loading, error } = useUserParkings();

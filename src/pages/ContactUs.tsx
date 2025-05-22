@@ -1,11 +1,11 @@
 import React from "react";
-import { ContactList } from "../components/ContactList";
+import { ContactForm } from "../forms/ContactForm";
 
 
 export const ContactUs: React.FC = () => {
     return (
         <div>
-<ContactList />
+<ContactForm />
         </div>
    
     );

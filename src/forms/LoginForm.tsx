@@ -23,7 +23,6 @@ export default function LoginForm({
   const handleSubmit = (e: React.FormEvent) => {
     setFormAnimation(true);
     onSubmit(e);
-    // Reset animation after submission
     setTimeout(() => setFormAnimation(false), 1000);
   };
 

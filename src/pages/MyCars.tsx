@@ -1,6 +1,6 @@
 import React from "react";
 import { useCars } from "../hooks/useCars"
-import UserCarList from "../components/UserCarsList";
+import UserCarList from "../components/lists/UserCarsList";
 
 
 export const MyCars: React.FC = () => {

@@ -43,14 +43,16 @@ export interface Parea {
 
 export interface Car {
     id: number | null;
-    numberPlate: string;
-    brand: string;
-    model: string;
-    year: number;
-    color: string;
-    type: string;
-    description: string;
-    
+    registrationNumber: string | null;
+    make: string | null;
+    model: string | null;
+    modelYear: number | null;
+    color: string | null;
+    type: string | null;
+    totalWeight: number | null;
+    description: string| null;
+    userId: number | null;
+
   }
 
 
@@ -247,6 +249,17 @@ async function deleteCar(id: number): Promise<void> {
       throw new Error(`Failed to delete Car with status: ${response.status}`);
     }
   }
+
+  export async function getCarFromNumberplate(plateNumber: string): Promise<Car> {
+    const options = {
+        method: "GET",
+        headers: {
+            "X-AUTH-TOKEN": "unq3bj96qz7umcabu3qtfqnu2okjsadn",
+            // Fjernet "Content-Type": "application/json" for at undgå CORS fejl
+        },
+    };
+    return fetch('https://v1.motorapi.dk/vehicles/' + plateNumber, options).then(handleHttpErrors);
+}
 
   
 export { getUsers, getUser, addUser, editUser, deleteUser, getParkings, getParking, editParking, deleteParking, addParking, getParea, getPareaById, addParea, editParea, deleteParea, getCars, getCar, getCarsByUserId, addCar, editCar, deleteCar };

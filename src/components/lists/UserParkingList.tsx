@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import type { Parking } from "../services/apiFacade";
-import ParkingInfoModal from "../modalView/ParkinginfoModal";
-import ParkingEditModal from "../modalView/ParkingEditModal";
-import ParkingDeleteModal from "../modalView/ParkingDeleteModal";
+import type { Parking } from "../../services/apiFacade";
+import ParkingInfoModal from "../../modalView/ParkinginfoModal";
+import ParkingEditModal from "../../modalView/ParkinginfoModal";
+import ParkingDeleteModal from "../../modalView/ParkinginfoModal";
 import { useNavigate } from "react-router-dom";
 import "./UserParkingList.css";
 

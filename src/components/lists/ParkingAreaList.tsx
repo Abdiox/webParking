@@ -1,5 +1,5 @@
 import React from "react";
-import { useParkingAreas } from "../hooks/useParkingAreas";
+import { useParkingAreas } from "../../hooks/useParkingAreas";
 import "./ParkingAreas.css"; 
 
 export const ParkingAreaList: React.FC = () => {

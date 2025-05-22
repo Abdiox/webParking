@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import './ContactList.css';
+import './ContactForm.css';
 
-export const ContactList: React.FC = () => {
+export const ContactForm: React.FC = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 

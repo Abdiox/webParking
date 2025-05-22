@@ -1,6 +1,6 @@
 import React from "react";
 import type { Parking } from "../services/apiFacade";
-import UserParkingList from "./UserParkingList";
+import UserParkingList from "./lists/UserParkingList";
 import { useUserParkings } from "../hooks/useUserParkings";
 import "./HomeText.css";
 

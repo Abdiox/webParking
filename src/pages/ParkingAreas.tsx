@@ -1,6 +1,6 @@
 import React from "react";
-import { ParkingAreaList } from "../components/ParkingAreaList";
-import "../components/ParkingAreas.css";
+import { ParkingAreaList } from "../components/lists/ParkingAreaList";
+import "../components/lists/ParkingAreas.css"
 
 export const ParkingAreas: React.FC = () => {
   return (

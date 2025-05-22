@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import type { Parking, Parea } from "../services/apiFacade";
+import { useCarLookUp } from "../hooks/useCarLookUp";
 import "./RegistrationForm.css"; 
 
 interface RegistrationFormProps {
@@ -11,6 +12,14 @@ interface RegistrationFormProps {
 
 export default function RegistrationForm({ parking, areas, onChange, onSubmit }: RegistrationFormProps) {
   const now = new Date().toISOString().slice(0, 16);
+  const { carDetails, isLoading, error, lookupCar } = useCarLookUp();
+  
+  const handlePlateNumberBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
+    const plateNumber = e.target.value.trim();
+    if (plateNumber.length >= 2) {
+      await lookupCar(plateNumber);
+    }
+  };
   
   return (
     <div className="parking-form-container">
@@ -18,17 +27,17 @@ export default function RegistrationForm({ parking, areas, onChange, onSubmit }:
         <h2>Registrer Parkering</h2>
         
         <div className="form-group">
-          <label htmlFor="pArea">Parkeringsområde:</label>
+          <label htmlFor="parea">Parkeringsområde:</label>
           <select 
-            id="pArea"
-            name="pArea" 
-            value={parking.pArea} 
+            id="parea"
+            name="parea" 
+            value={parking.parea?.id || ""} 
             onChange={onChange} 
             required
           >
             <option value="">-- Vælg område --</option>
             {areas.map((a) => (
-              <option key={a.id} value={a.areaName}>
+              <option key={a.id} value={a.id || 0}>
                 {a.areaName} ({a.city}, {a.postalCode})
               </option>
             ))}
@@ -37,15 +46,48 @@ export default function RegistrationForm({ parking, areas, onChange, onSubmit }:
         
         <div className="form-group">
           <label htmlFor="plateNumber">Nummerplade:</label>
-          <input 
-            id="plateNumber"
-            name="plateNumber" 
-            placeholder="Nummerplade" 
-            value={parking.plateNumber} 
-            onChange={onChange} 
-            required 
-          />
+          <div className="plate-input-container">
+            <input 
+              id="plateNumber"
+              name="plateNumber" 
+              placeholder="Nummerplade" 
+              value={parking.plateNumber} 
+              onChange={onChange}
+              onBlur={handlePlateNumberBlur}
+              required 
+            />
+            {isLoading && <span className="loading-indicator">Søger...</span>}
+          </div>
+          {error && <p className="error-message">{error}</p>}
         </div>
+        
+        {carDetails && (
+          <div className="car-details">
+            <h3>Biloplysninger</h3>
+            <div className="car-info-grid">
+              <div className="car-info-item">
+                <span>Mærke:</span>
+                <span>{carDetails.brand}</span>
+              </div>
+              <div className="car-info-item">
+                <span>Model:</span>
+                <span>{carDetails.model}</span>
+              </div>
+              <div className="car-info-item">
+                <span>Årgang:</span>
+                <span>{carDetails.year}</span>
+              </div>
+              <div className="car-info-item">
+                <span>Farve:</span>
+                <span>{carDetails.color}</span>
+              </div>
+              <div className="car-info-item">
+                <span>Type:</span>
+                <span>{carDetails.type}</span>
+              </div>
+            </div>
+          </div>
+        )}
         
         <div className="form-group">
           <label htmlFor="startTime">Starttidspunkt:</label>
@@ -74,7 +116,9 @@ export default function RegistrationForm({ parking, areas, onChange, onSubmit }:
         </div>
         
         <div className="form-group button-group">
-          <button type="submit">Opret Parkering</button>
+          <button type="submit" disabled={!carDetails && parking.plateNumber.length > 0}>
+            {!carDetails && parking.plateNumber.length > 0 ? "Find bil først" : "Opret Parkering"}
+          </button>
         </div>
       </form>
     </div>
