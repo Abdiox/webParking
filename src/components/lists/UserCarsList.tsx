@@ -44,7 +44,6 @@ function UserCarList() {
                 <td>{getCarTypeIcon(car.type || "")}</td>
                 
                 <td>
-                  {/* Add any action buttons here */}
                 </td>
               </tr>
             ))}

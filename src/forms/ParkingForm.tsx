@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import type { Parking, Parea } from "../services/apiFacade";
 import { useCarLookUp } from "../hooks/useCarLookUp";
-import { usePAreaValidation } from "../hooks/usePAreaValidation";
 import "./RegistrationForm.css"; 
 
 interface RegistrationFormProps {
@@ -30,7 +29,6 @@ export default function RegistrationForm({ parking, areas, onChange, onSubmit }:
     
     if (area) {
       setSelectedArea(area);
-      // Nulstil slutdato når området ændres
       if (parking.startTime) {
         updateMaxEndDate(parking.startTime, area.daysAllowedParking);
       }
@@ -42,7 +40,6 @@ export default function RegistrationForm({ parking, areas, onChange, onSubmit }:
   const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newStartDate = e.target.value;
     
-    // Opdater max end date baseret på ny startdato
     if (selectedArea) {
       updateMaxEndDate(newStartDate, selectedArea.daysAllowedParking);
     }
@@ -57,7 +54,6 @@ export default function RegistrationForm({ parking, areas, onChange, onSubmit }:
     const maxDate = new Date(startDate);
     maxDate.setDate(startDate.getDate() + maxDays);
     
-    // Konverter til format som datetime-local kan bruge
     setMaxEndDate(maxDate.toISOString().slice(0, 16));
   };
   

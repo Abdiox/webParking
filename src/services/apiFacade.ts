@@ -92,14 +92,14 @@ async function getUser(id: number): Promise<UserDetails> {
 }
 async function editUser(user: UserDetails): Promise<UserDetails> {
   const options = makeOptions("PUT", user);
-  return fetch(USERS_URL + "/" + user.id, options).then(handleHttpErrors);
+  return fetch(USERS_URL + "/update/" + user.id, options).then(handleHttpErrors);
 }
 
-async function deleteUser(id: number): Promise<void> {
-  console.log("Deleting user with ID:", id);
+async function deleteUser(user: UserDetails): Promise<void> {
+  console.log("Deleting user with ID:", user.id);
   const options = makeOptions("DELETE", null);
-
-  const response = await fetch(USERS_URL + "/" + id, options);
+  
+  const response = await fetch(USERS_URL + "/" + user.id, options);
    console.log("Response from deleteUser:", response);
    
   if (!response.ok) {

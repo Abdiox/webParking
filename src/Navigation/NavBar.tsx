@@ -22,11 +22,6 @@ const isAdmin = () => {
 
 
 const isUser = () => {
-  console.log("Checking user status:", {
-    userObject: user,
-    userRole: user?.role,
-    roleInLocalStorage: localStorage.getItem("role")
-  });
   return user && user.role === "USER";
 };
 

@@ -18,7 +18,6 @@ export function useCars() {
         const userIdNum = Number(userIdFromStorage);
         setUserId(userIdNum);
 
-        console.log("Fetching cars for user ID:", userIdNum);
         const allCars = await getCarsByUserId(userIdNum);
         console.log("Cars fetched from API:", allCars);
         
@@ -35,7 +34,6 @@ export function useCars() {
   }, []);
 
   useEffect(() => {
-    console.log("Cars in state:", cars);
   }, [cars]);
 
   const getCarTypeIcon = (type: string) => {

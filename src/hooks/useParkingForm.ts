@@ -33,7 +33,6 @@ export function useParkingForm() {
     getParea().then(setAreas);
   }, []);
 
-  // Valider når parking ændres
   useEffect(() => {
     if (parking.parea?.id && parking.startTime && parking.endTime) {
       validateParking(parking);
@@ -65,9 +64,7 @@ export function useParkingForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Valider eksplicit én sidste gang før submission
-    const valid = validateParking(parking);
+        const valid = validateParking(parking);
     
     if (!valid) {
       alert("Parkeringsperioden er ikke gyldig. " + (daysError || ""));
