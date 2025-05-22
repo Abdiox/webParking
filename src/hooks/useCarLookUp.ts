@@ -18,7 +18,7 @@ export function useCarLookUp() {
     
     try {
       const carData = await getCarFromNumberplate(plateNumber);
-      console.log("API response:", carData); // Se den nøjagtige struktur
+      console.log("API response:", carData);
 
       setCarDetails(carData);
       return carData;

@@ -41,12 +41,13 @@ const CarForm: React.FC<CarFormProps> = ({ onCarAdded }) => {
     try {
       const newCar: Car = {
         id: null,
-        numberPlate: plateNumber,
-        brand: carDetails.brand || "",
+        registrationNumber: plateNumber,
+        make: carDetails.make || "",
         model: carDetails.model || "",
-        year: carDetails.year || 0,
+        modelYear: carDetails.modelYear || 0,
         color: carDetails.color || "",
         type: carDetails.type || "",
+        totalWeight: carDetails.totalWeight || 0,
         description: description,
         userId: Number(localStorage.getItem("userId")) || null
       };
@@ -110,7 +111,7 @@ const CarForm: React.FC<CarFormProps> = ({ onCarAdded }) => {
             <div className="car-info-grid">
               <div className="car-info-item">
                 <span>Mærke:</span>
-                <span>{carDetails.brand}</span>
+                <span>{carDetails.make}</span>
               </div>
               <div className="car-info-item">
                 <span>Model:</span>
@@ -118,15 +119,19 @@ const CarForm: React.FC<CarFormProps> = ({ onCarAdded }) => {
               </div>
               <div className="car-info-item">
                 <span>Årgang:</span>
-                <span>{carDetails.year}</span>
+                <span>{carDetails.modelYear}</span>
               </div>
               <div className="car-info-item">
                 <span>Farve:</span>
-                <span>{carDetails.color}</span>
+                <span>{carDetails.color || "Ukendt"}</span>
               </div>
               <div className="car-info-item">
                 <span>Type:</span>
                 <span>{carDetails.type}</span>
+              </div>
+              <div className="car-info-item">
+                <span>Vægt:</span>
+                <span>{carDetails.total_weight} kg</span>
               </div>
             </div>
           </div>

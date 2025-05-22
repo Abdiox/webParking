@@ -49,7 +49,7 @@ export interface Car {
     modelYear: number | null;
     color: string | null;
     type: string | null;
-    totalWeight: number | null;
+    total_weight: number;
     description: string| null;
     userId: number | null;
 

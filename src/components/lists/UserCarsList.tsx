@@ -16,8 +16,6 @@ function UserCarList() {
       <div className="cars-header">
         <h1>Mine Biler</h1>
       
-
-      
       {loading && <p className="loading-message">Indlæser biler …</p>}
       {error && <p className="error-message">{error}</p>}
       {!loading && !error && cars.length === 0 && (
@@ -28,6 +26,9 @@ function UserCarList() {
           <thead>
             <tr>
               <th>Nummerplade</th>
+              <th>Producent</th>
+              <th>Model</th>
+              <th>Farve</th>
               <th>Biltype</th>
               <th>Handlinger</th>
             </tr>
@@ -35,8 +36,13 @@ function UserCarList() {
           <tbody>
             {cars.map((car) => (
               <tr key={car.id}>
-                <td>{car.numberPlate}</td>
-                <td>{getCarTypeIcon(car.type)}</td>
+                <td>{car.registrationNumber}</td>
+                <td>{car.make}</td>
+                <td>{car.model}</td>
+                <td>{car.color}</td>
+                <td>{car.modelYear}</td>
+                <td>{getCarTypeIcon(car.type || "")}</td>
+                
                 <td>
                   {/* Add any action buttons here */}
                 </td>
@@ -63,8 +69,6 @@ function UserCarList() {
         />
       )}
     </div>
-
-    
   );
 }
 
