@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import Modal from "./modal";
+import type { Parking } from "../services/apiFacade";
 import { deleteParking } from "../services/apiFacade";
 import { useNavigate } from "react-router-dom";
 
 const ParkingDeleteModal = ({ show, onClose, parking }) => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  
+
   const handleDelete = async () => {
     if (!parking) return;
     setIsLoading(true);
@@ -14,11 +15,12 @@ const ParkingDeleteModal = ({ show, onClose, parking }) => {
     try {
       await deleteParking(parking.id);
       alert("Parkering slettet!");
-      window.location.reload();
-      navigate("/my-parking");
       onClose();
+      // Reload siden for at opdatere listen
+      window.location.reload();
     } catch (error) {
-      alert("Der skete en fejl: " + error);
+      console.error("Error deleting parking:", error);
+      alert("Der skete en fejl: " + (error.message || error));
     } finally {
       setIsLoading(false);
     }
