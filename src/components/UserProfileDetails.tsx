@@ -77,7 +77,7 @@ const UserProfileDetails: React.FC<Props> = ({ user }) => {
         <div className="profile-row">
           <span className="label">Adresse:</span>
           <span>
-            {user.adress}, {user.city} {user.zipCode}
+            {user.address}, {user.city} {user.zipCode}
           </span>
         </div>
       </div>

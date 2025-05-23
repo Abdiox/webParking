@@ -17,7 +17,7 @@ export interface UserDetails {
     password: string;
     phoneNumber: number;
     rentalUnit: number;
-    adress: string;
+    address: string;
     city: string;
     zipCode: number;
     role: Roles | null;

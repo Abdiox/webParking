@@ -10,7 +10,7 @@ const UserEditModal = ({ show, onClose, user }) => {
     const [editedUser, setEditedUser] = useState({
         id: null,
         email: "",
-        phone: "",
+        phoneNumber: "",
         firstName: "",
         lastName: "",
         address: "",
@@ -25,10 +25,10 @@ const UserEditModal = ({ show, onClose, user }) => {
         setEditedUser({
             id: user.id,
             email: user.email || "",
-            phone: user.phoneNumber || "",
+            phoneNumber: user.phoneNumber || "",
             firstName: user.firstName || "",
             lastName: user.lastName || "",
-            address: user.adress || "",
+            address: user.address || "",
             city: user.city || "",
             zipCode: user.zipCode || ""
         });
@@ -77,8 +77,8 @@ const UserEditModal = ({ show, onClose, user }) => {
             Telefon:
             <input
                 type="text"
-                name="phone"
-                value={editedUser.phone}
+                name="phoneNumber"
+                value={editedUser.phoneNumber}
                 onChange={handleInputChange}
             />
             </label>
