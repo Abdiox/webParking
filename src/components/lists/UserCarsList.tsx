@@ -40,7 +40,6 @@ function UserCarList() {
                 <td>{car.make}</td>
                 <td>{car.model}</td>
                 <td>{car.color}</td>
-                <td>{car.modelYear}</td>
                 <td>{getCarTypeIcon(car.type || "")}</td>
                 
                 <td>

@@ -1,4 +1,3 @@
-// pages/History.tsx
 import React from "react";
 import { useUserParkings } from "../hooks/useUserParkings";
 import { useMonthNavigation } from "../hooks/useMonthNavigation";
