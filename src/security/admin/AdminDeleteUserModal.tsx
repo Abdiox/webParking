@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Modal from "../../modalView/modal";
+import Modal from "../../modalView/Modal";
 import { deleteUser } from "../../services/apiFacade";
 import { useNavigate } from "react-router-dom";
 
@@ -16,7 +16,7 @@ const AdminDeleteUserModal = ({ show, onClose, user }) => {
       await deleteUser(user.id);
       alert("Bruger slettet!");
       onClose();
-      navigate("/admin/users");
+      window.location.reload();
     } catch (error) {
       alert("Der skete en fejl: " + error);
     } finally {
@@ -29,7 +29,7 @@ const AdminDeleteUserModal = ({ show, onClose, user }) => {
     return (
       <div className="delete-user-confirm">
         <p>Er du sikker på, at du vil slette denne bruger?</p>
-        <p>Brugernavn: <strong>{user?.username || "Ingen bruger valgt"}</strong></p>
+        <p>Brugernavn: <strong>{user?.firstName || "Ingen bruger valgt"}</strong></p>
         <p>User ID: <strong>{user?.id || "Ingen ID"}</strong></p>
         <p>Dette kan ikke fortrydes.</p>
       </div>
@@ -61,14 +61,14 @@ const AdminDeleteUserModal = ({ show, onClose, user }) => {
 
   return (
     <Modal
-      show={show}
-      onClose={onClose}
-      title="Bekræft sletning"
-      content={renderContent()}
-      footer={renderFooter()}
-    />
+    show={show}
+    onClose={!isLoading ? onClose : () => {}}
+    title="Slet Bruger"
+    footer={renderFooter()}
+  >
+    {renderContent()}
+  </Modal>
   );
-
 
 }
 

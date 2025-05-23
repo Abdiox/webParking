@@ -16,7 +16,6 @@ const ParkingDeleteModal = ({ show, onClose, parking }) => {
       await deleteParking(parking.id);
       alert("Parkering slettet!");
       onClose();
-      // Reload siden for at opdatere listen
       window.location.reload();
     } catch (error) {
       console.error("Error deleting parking:", error);

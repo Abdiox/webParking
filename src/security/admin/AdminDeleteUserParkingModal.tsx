@@ -17,7 +17,7 @@ const AdminDeleteUserParkingModal = ({ show, onClose, parking }) => {
       await deleteParking(parking.id);
       alert("Parkering slettet!");
       onClose();
-      navigate("/admin/parkings");
+      window.location.reload();
     } catch (error) {
       alert("Der skete en fejl: " + error);
     } finally {
@@ -31,7 +31,7 @@ const AdminDeleteUserParkingModal = ({ show, onClose, parking }) => {
       <div className="delete-parking-confirm">
         <p>Er du sikker på, at du vil slette denne parkering?</p>
         <p>Parkering ID: <strong>{parking?.id || "Ingen parkering valgt"}</strong></p>
-        <p>Brugernavn: <strong>{parking?.username || "Ingen bruger valgt"}</strong></p>
+        <p>Brugernavn: <strong>{parking?.userName || "Ingen bruger valgt"}</strong></p>
         <p>Dette kan ikke fortrydes.</p>
       </div>
     );
@@ -58,13 +58,14 @@ const AdminDeleteUserParkingModal = ({ show, onClose, parking }) => {
     };
 
     return (
-        <Modal
-            show={show}
-            onClose={onClose}
-            title="Bekræft sletning af parkering"
-            content={renderContent()}
-            footer={renderFooter()}
-        />
+      <Modal
+      show={show}
+      onClose={!isLoading ? onClose : () => {}}
+      title="Slet Parkering"
+      footer={renderFooter()}
+    >
+      {renderContent()}
+    </Modal>
     );
 }
 export default AdminDeleteUserParkingModal;

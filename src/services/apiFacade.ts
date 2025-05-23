@@ -95,17 +95,21 @@ async function editUser(user: UserDetails): Promise<UserDetails> {
   return fetch(USERS_URL + "/update/" + user.id, options).then(handleHttpErrors);
 }
 
-async function deleteUser(user: UserDetails): Promise<void> {
-  console.log("Deleting user with ID:", user.id);
+async function deleteUser(id: number): Promise<void> {
+  console.log("Deleting user with ID:", id);
   const options = makeOptions("DELETE", null);
   
-  const response = await fetch(USERS_URL + "/" + user.id, options);
+  const response = await fetch(USERS_URL + "/delete/" + id, options);
+
    console.log("Response from deleteUser:", response);
    
   if (!response.ok) {
     throw new Error(`Failed to delete user with status: ${response.status}`);
   }
 }
+
+
+
 
 
 
