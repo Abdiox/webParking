@@ -118,7 +118,7 @@ export default function RegisterForm({ user, onChange, onSubmit }: RegisterFormP
           <div className="divider">
             <span className="divider-text">eller</span>
           </div>
-          <button type="button" className="btn-secondary" onClick={() => navigate("/login")}>
+          <button type="button" className="btn-secondary-register" onClick={() => navigate("/login")}>
             Tilbage til login
           </button>
         </div>

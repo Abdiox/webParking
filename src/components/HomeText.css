@@ -1,18 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 .home-container {
-  width: 65%;
-  max-width: 1200px;
-  margin: 0;
-  padding: 2rem;
-  background-color: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-  font-family: 'Poppins', sans-serif;
-  position: absolute;
-  top: 10%;
-  left: 25%;
-  overflow: hidden;
+  .home-container {
+    max-width: 1200px;
+    margin: 0 auto 0 200px; 
+    padding: 30px 40px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    font-family: 'Poppins', sans-serif;
+    position: relative;
+  }
 }
 
 .home-container::before {
@@ -50,13 +48,13 @@
 
 
 .home-title {
-  font-size: 2.2rem;
+  font-size: 2.5rem;
   color: #2c3e50;
-  margin-bottom: 1.5rem;
-  font-weight: 600;
-  text-align: center;
+  font-weight: 700;
+  margin: 0 auto 0 250px; 
   position: relative;
-  padding-bottom: 0.8rem;
+  padding-bottom: 0.75rem;
+  
 }
 
 .home-title::after {
@@ -70,20 +68,13 @@
   background-color: #3498db;
   border-radius: 2px;
 }
-/*
 
 .home-subtitle {
-  font-size: 1.6rem;
+  font-size: 20px;
   color: #34495e;
-  margin: 2rem 0 1.5rem 0;
   font-weight: 600;
-  position: absolute;
-  top: 25%;
-  left: 40%;
-  text-align: center;
-  display: inline-block;
+  margin: 0 auto 0 250px; 
 }
-*/
 
 .home-subtitle::after {
   content: '';
