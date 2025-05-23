@@ -92,7 +92,6 @@ const UserParkingList: React.FC<Props> = ({ parkings, loading, error }) => {
 
   return (
     <div className="parking-app">
-      {/* Navigation */}
       <nav className="app-nav">
         <div className="nav-content">
           <div className="logo-container">
@@ -102,7 +101,6 @@ const UserParkingList: React.FC<Props> = ({ parkings, loading, error }) => {
         </div>
       </nav>
 
-      {/* Main content */}
       <div className="parking-container">
         {loading && <p className="loading">Indlæser dine parkeringer...</p>}
         {error && <p className="error">{error}</p>}
@@ -167,7 +165,6 @@ const UserParkingList: React.FC<Props> = ({ parkings, loading, error }) => {
         )}
       </div>
 
-      {/* Modals */}
       <ParkingInfoModal 
         show={activeModal !== null}
         onClose={closeModal}

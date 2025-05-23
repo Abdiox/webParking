@@ -1,11 +1,25 @@
 import React, { useState } from "react";
 import { useCars } from "../../hooks/useCars";
 import CarForm from "../../forms/CarForm";
+import CarsDeleteModal from "../../modalView/CarsDeleteModal";
 import "./UserCars.css";
 
 function UserCarList() {
   const { cars, loading, error, getCarTypeIcon, refreshCars } = useCars();
   const [showCarForm, setShowCarForm] = useState(false);
+
+  const [deleteModal, setDeleteModal] = useState({
+    show: false,
+    car: null,
+  });
+
+  const openDeleteModal = (car) => {
+    setDeleteModal({ show: true, car: car });
+  };
+
+  const closeDeleteModal = () => {
+    setDeleteModal({ show: false, car: null });
+  };
 
   const toggleCarForm = () => {
     setShowCarForm(!showCarForm);
@@ -15,6 +29,14 @@ function UserCarList() {
     <div className="user-cars-container">
       <div className="cars-header">
         <h1>Mine Biler</h1>
+      
+        <button 
+          className="add-car-button" 
+          onClick={toggleCarForm}
+        >
+          {showCarForm ? "Annuller" : "Tilføj Bil"}
+        </button>
+      </div>
       
       {loading && <p className="loading-message">Indlæser biler …</p>}
       {error && <p className="error-message">{error}</p>}
@@ -41,22 +63,19 @@ function UserCarList() {
                 <td>{car.model}</td>
                 <td>{car.color}</td>
                 <td>{getCarTypeIcon(car.type || "")}</td>
-                
-                <td>
+                <td className="action-cell">
+                  <button 
+                    className="delete-car-button" 
+                    onClick={() => openDeleteModal(car)}
+                  >
+                    Slet
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
-
-          <button 
-          className="add-car-button" 
-          onClick={toggleCarForm}
-        >
-          {showCarForm ? "Annuller" : "Tilføj Bil"}
-        </button>
-      </div>
 
       {showCarForm && (
         <CarForm 
@@ -66,6 +85,17 @@ function UserCarList() {
           }}
         />
       )}
+
+     <CarsDeleteModal
+        show={deleteModal.show}
+        car={deleteModal.car}
+        onClose={closeDeleteModal}
+        onDelete={() => {
+          refreshCars();
+          closeDeleteModal();
+        }
+        }
+      />
     </div>
   );
 }
