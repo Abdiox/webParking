@@ -64,7 +64,8 @@ export function useParkingForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-        const valid = validateParking(parking);
+    
+    const valid = validateParking(parking);
     
     if (!valid) {
       alert("Parkeringsperioden er ikke gyldig. " + (daysError || ""));
@@ -85,6 +86,7 @@ export function useParkingForm() {
   return {
     parking,
     areas,
+    userId, // Added userId to return values
     handleChange,
     handleSubmit,
     daysError,

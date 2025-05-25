@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import type { Parking, Parea } from "../services/apiFacade";
+import type { Parking, Parea, Car } from "../services/apiFacade";
 import { useCarLookUp } from "../hooks/useCarLookUp";
+import { getCarsByUserId } from "../services/apiFacade";
 import "./RegistrationForm.css"; 
 
 interface RegistrationFormProps {
@@ -8,15 +9,49 @@ interface RegistrationFormProps {
   areas: Parea[];
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   onSubmit: (e: React.FormEvent) => void;
+  userId: number; // Added to get user's cars
 }
 
-export default function RegistrationForm({ parking, areas, onChange, onSubmit }: RegistrationFormProps) {
+type CarSelectionMode = "existing" | "new";
+
+export default function RegistrationForm({ parking, areas, onChange, onSubmit, userId }: RegistrationFormProps) {
   const now = new Date().toISOString().slice(0, 16);
-  const { carDetails, isLoading, error, lookupCar } = useCarLookUp();
+  const { carDetails, isLoading, error, lookupCar, resetCarDetails } = useCarLookUp();
   const [selectedArea, setSelectedArea] = useState<Parea | null>(null);
   const [maxEndDate, setMaxEndDate] = useState<string>("");
-  
+  const [carSelectionMode, setCarSelectionMode] = useState<CarSelectionMode>("existing");
+  const [userCars, setUserCars] = useState<Car[]>([]);
+  const [selectedCarId, setSelectedCarId] = useState<number | null>(null);
+  const [loadingUserCars, setLoadingUserCars] = useState(false);
+
+  // Load user's existing cars
+  useEffect(() => {
+    const loadUserCars = async () => {
+      if (!userId) return;
+      
+      setLoadingUserCars(true);
+      try {
+        const cars = await getCarsByUserId(userId);
+        setUserCars(cars);
+        
+        // If user has no cars, default to new car mode
+        if (cars.length === 0) {
+          setCarSelectionMode("new");
+        }
+      } catch (error) {
+        console.error("Error loading user cars:", error);
+        setCarSelectionMode("new");
+      } finally {
+        setLoadingUserCars(false);
+      }
+    };
+
+    loadUserCars();
+  }, [userId]);
+
   const handlePlateNumberBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
+    if (carSelectionMode !== "new") return;
+    
     const plateNumber = e.target.value.trim();
     if (plateNumber.length >= 2) {
       await lookupCar(plateNumber);
@@ -56,6 +91,43 @@ export default function RegistrationForm({ parking, areas, onChange, onSubmit }:
     
     setMaxEndDate(maxDate.toISOString().slice(0, 16));
   };
+
+  const handleCarSelectionModeChange = (mode: CarSelectionMode) => {
+    setCarSelectionMode(mode);
+    setSelectedCarId(null);
+    resetCarDetails();
+    
+    const plateEvent = {
+      target: { name: "plateNumber", value: "" }
+    } as React.ChangeEvent<HTMLInputElement>;
+    onChange(plateEvent);
+  };
+
+  const handleExistingCarSelection = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const carId = Number(e.target.value);
+    setSelectedCarId(carId);
+    
+    const selectedCar = userCars.find(car => car.id === carId);
+    if (selectedCar && selectedCar.registrationNumber) {
+      // Update the parking object with the selected car's plate number
+      const plateEvent = {
+        target: { 
+          name: "plateNumber", 
+          value: selectedCar.registrationNumber 
+        }
+      } as React.ChangeEvent<HTMLInputElement>;
+      onChange(plateEvent);
+    }
+  };
+
+  const getSelectedCarDetails = () => {
+    if (carSelectionMode === "existing" && selectedCarId) {
+      return userCars.find(car => car.id === selectedCarId);
+    }
+    return carDetails;
+  };
+
+  const selectedCarForDisplay = getSelectedCarDetails();
   
   useEffect(() => {
     if (parking.parea?.id) {
@@ -68,6 +140,14 @@ export default function RegistrationForm({ parking, areas, onChange, onSubmit }:
       }
     }
   }, [parking.parea?.id, areas, parking.startTime]);
+
+  const isFormValid = () => {
+    if (carSelectionMode === "existing") {
+      return selectedCarId !== null;
+    } else {
+      return selectedCarForDisplay !== null;
+    }
+  };
   
   return (
     <div className="parking-form-container">
@@ -91,51 +171,104 @@ export default function RegistrationForm({ parking, areas, onChange, onSubmit }:
             ))}
           </select>
         </div>
-        
+
+        {/* Car Selection Mode Toggle */}
         <div className="form-group">
-          <label htmlFor="plateNumber">Nummerplade:</label>
-          <div className="plate-input-container">
-            <input 
-              id="plateNumber"
-              name="plateNumber" 
-              placeholder="Nummerplade" 
-              value={parking.plateNumber} 
-              onChange={onChange}
-              onBlur={handlePlateNumberBlur}
-              required 
-            />
-            {isLoading && <span className="loading-indicator">Søger...</span>}
+          <label>Vælg køretøj:</label>
+          <div className="car-selection-toggle">
+            <button
+              type="button"
+              className={`toggle-btn ${carSelectionMode === "existing" ? "active" : ""}`}
+              onClick={() => handleCarSelectionModeChange("existing")}
+              disabled={loadingUserCars || userCars.length === 0}
+            >
+              Mine biler ({userCars.length})
+            </button>
+            <button
+              type="button"
+              className={`toggle-btn ${carSelectionMode === "new" ? "active" : ""}`}
+              onClick={() => handleCarSelectionModeChange("new")}
+            >
+              Ny bil (nummerplade)
+            </button>
           </div>
-          {error && <p className="error-message">{error}</p>}
+          {userCars.length === 0 && !loadingUserCars && (
+            <p className="info-message">Du har ingen registrerede biler. Brug nummerplade-søgning.</p>
+          )}
         </div>
+
+        {/* Existing Cars Selection */}
+        {carSelectionMode === "existing" && userCars.length > 0 && (
+          <div className="form-group">
+            <label htmlFor="existingCar">Vælg fra dine biler:</label>
+            <select
+              id="existingCar"
+              value={selectedCarId || ""}
+              onChange={handleExistingCarSelection}
+              required
+            >
+              <option value="">-- Vælg bil --</option>
+              {userCars.map((car) => (
+                <option key={car.id} value={car.id || 0}>
+                  {car.registrationNumber} - {car.make} {car.model} ({car.modelYear})
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {/* New Car Plate Number Input */}
+        {carSelectionMode === "new" && (
+          <div className="form-group">
+            <label htmlFor="plateNumber">Nummerplade:</label>
+            <div className="plate-input-container">
+              <input 
+                id="plateNumber"
+                name="plateNumber" 
+                placeholder="Indtast nummerplade" 
+                value={parking.plateNumber} 
+                onChange={onChange}
+                onBlur={handlePlateNumberBlur}
+                required 
+              />
+              {isLoading && <span className="loading-indicator">Søger...</span>}
+            </div>
+            {error && <p className="error-message">{error}</p>}
+          </div>
+        )}
         
-        {carDetails && (
+        {/* Car Details Display */}
+        {selectedCarForDisplay && (
           <div className="car-details">
             <h3>Biloplysninger</h3>
             <div className="car-info-grid">
               <div className="car-info-item">
+                <span>Nummerplade:</span>
+                <span>{selectedCarForDisplay.registrationNumber}</span>
+              </div>
+              <div className="car-info-item">
                 <span>Mærke:</span>
-                <span>{carDetails.make}</span>
+                <span>{selectedCarForDisplay.make}</span>
               </div>
               <div className="car-info-item">
                 <span>Model:</span>
-                <span>{carDetails.model}</span>
+                <span>{selectedCarForDisplay.model}</span>
               </div>
               <div className="car-info-item">
                 <span>Årgang:</span>
-                <span>{carDetails.modelYear}</span>
+                <span>{selectedCarForDisplay.modelYear}</span>
               </div>
               <div className="car-info-item">
                 <span>Farve:</span>
-                <span>{carDetails.color}</span>
+                <span>{selectedCarForDisplay.color}</span>
               </div>
               <div className="car-info-item">
                 <span>Vægt:</span>
-                <span>{carDetails.total_weight} kg</span>
+                <span>{selectedCarForDisplay.total_weight} kg</span>
               </div>
               <div className="car-info-item">
                 <span>Type:</span>
-                <span>{carDetails.type}</span>
+                <span>{selectedCarForDisplay.type}</span>
               </div>
             </div>
           </div>
@@ -181,9 +314,9 @@ export default function RegistrationForm({ parking, areas, onChange, onSubmit }:
         <div className="form-group button-group">
           <button 
             type="submit" 
-            disabled={!carDetails && parking.plateNumber.length > 0}
+            disabled={!isFormValid()}
           >
-            {!carDetails && parking.plateNumber.length > 0 ? "Find bil først" : "Opret Parkering"}
+            {!isFormValid() ? "Vælg køretøj først" : "Opret Parkering"}
           </button>
         </div>
       </form>
