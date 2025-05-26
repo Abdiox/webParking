@@ -251,6 +251,87 @@
 }
 
 
+.edit-animation-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.edit-animation-container > div {
+  width: 200px;
+  height: 200px;
+}
+
+.edit-success-message {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 10px;
+  color: #4caf50;
+}
+
+.edit-user-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 10px;
+  width: 100%;
+}
+
+.edit-user-form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.edit-user-form input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 5px;
+}
+
+.edit-user-form input:focus {
+  border-color: #2196F3;
+  outline: none;
+  box-shadow: 0 0 5px rgba(33, 150, 243, 0.3);
+}
+
+.modal-button {
+  padding: 10px 20px;
+  margin: 0 5px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.modal-button.save {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+}
+
+.modal-button.cancel {
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+}
+
+.modal-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.modal-button.save:hover:not(:disabled) {
+  background-color: #43a047;
+}
+
+.modal-button.cancel:hover:not(:disabled) {
+  background-color: #e0e0e0;
+}
 
 
 

@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import Modal from "./Modal";
 import { editUser } from "../services/apiFacade";
 import { useNavigate } from "react-router-dom";
-import "./UserEditModal.css";
+import Lottie from "lottie-react";
+import EditAnimation from "../components/animationer/EditAnimation.json";
 
 
 const UserEditModal = ({ show, onClose, user }) => {
     const [isLoading, setIsLoading] = useState(false);
+    const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
     const [editedUser, setEditedUser] = useState({
         id: null,
         email: "",
@@ -48,19 +50,36 @@ const UserEditModal = ({ show, onClose, user }) => {
         setIsLoading(true);
     
         try {
-        await editUser(editedUser);
-        alert("Brugeroplysninger opdateret!");
-        window.location.reload();
-        navigate("/my-profile");
-        onClose();
+            await editUser(editedUser);
+            setShowSuccessAnimation(true);
+            
+            setTimeout(() => {
+                setShowSuccessAnimation(false);
+                onClose();
+                window.location.reload();
+            }, 3000);
         } catch (error) {
-        alert("Der skete en fejl: " + error);
-        } finally {
-        setIsLoading(false);
+            alert("Der skete en fejl: " + error);
+            setIsLoading(false);
         }
     };
     
     const renderContent = () => {
+        if (showSuccessAnimation) {
+            return (
+                <div className="edit-animation-container">
+                    <Lottie 
+                        animationData={EditAnimation} 
+                        loop={false} 
+                        autoplay={true}
+                    />
+                    <p className="edit-success-message">Brugeroplysninger opdateret!</p>
+                </div>
+            );
+        }
+        if (!user) {
+            return <p>Ingen bruger at redigere.</p>;
+        }
         return (
         <div className="edit-user-form">
     
@@ -155,9 +174,9 @@ const UserEditModal = ({ show, onClose, user }) => {
     return (
         <Modal
         show={show}
-        onClose={!isLoading ? onClose : () => {}}
+        onClose={!isLoading && !showSuccessAnimation ? onClose : () => {}}
         title="Rediger brugeroplysninger"
-        footer={renderFooter()}
+        footer={showSuccessAnimation ? null : renderFooter()}
         >
         {renderContent()}
         </Modal>

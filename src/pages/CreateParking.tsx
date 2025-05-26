@@ -1,6 +1,6 @@
 import React from "react";
 import { useParkingForm } from "../hooks/useParkingForm";
-import ParkingForm from "../forms/ParkingForm";
+import ParkingForm from "../forms/ParkingForm"
 
 export default function CreateParking() {
   const {
@@ -9,8 +9,8 @@ export default function CreateParking() {
     userId, 
     handleChange,
     handleSubmit,
+    navigateToMyParkings
   } = useParkingForm();
-
 
   if (!userId) {
     return <div>Loading...</div>;
@@ -24,6 +24,7 @@ export default function CreateParking() {
         userId={userId} 
         onChange={handleChange}
         onSubmit={handleSubmit}
+        onCreateSuccess={navigateToMyParkings}
       />
     </div>
   );

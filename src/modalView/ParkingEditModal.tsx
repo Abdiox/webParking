@@ -3,9 +3,13 @@ import Modal from "./Modal";
 import { editParking, getParea } from "../services/apiFacade";
 import { useNavigate } from "react-router-dom";
 import { usePAreaValidation } from "../hooks/usePAreaValidation"; 
+import Lottie from "lottie-react";
+import EditAnimation from "../components/animationer/EditAnimation.json";
+
 
 const ParkingEditModal = ({ show, onClose, parking, actionType }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
   const [areas, setAreas] = useState([]);
   const [editedParking, setEditedParking] = useState({
     id: null,
@@ -132,9 +136,13 @@ const ParkingEditModal = ({ show, onClose, parking, actionType }) => {
     
     try {
       await editParking(editedParking);
-      alert("Parkering opdateret!");
-      window.location.reload();
-      onClose();
+      setShowSuccessAnimation(true);
+            
+      setTimeout(() => {
+          setShowSuccessAnimation(false);
+          onClose();
+          window.location.reload();
+      }, 3000);
     } catch (error) {
       alert("Der skete en fejl: " + error);
     } finally {
@@ -144,6 +152,18 @@ const ParkingEditModal = ({ show, onClose, parking, actionType }) => {
   
   const renderContent = () => {
     const { minDate, maxDate, startMinDate, endMinDate } = getDateLimits();
+    if (showSuccessAnimation) {
+      return (
+        <div className="edit-animation-container">
+          <Lottie 
+            animationData={EditAnimation} 
+            loop={false} 
+            autoplay={true}
+          />
+          <p className="edit-success-message">Parkering ændret!</p>
+        </div>
+      );
+    }
     
     return (
       <div className="edit-parking-form">
@@ -237,13 +257,14 @@ const ParkingEditModal = ({ show, onClose, parking, actionType }) => {
   
   return (
     <Modal
-      show={show}
-      onClose={!isLoading ? onClose : () => {}}
-      title="Ændre parkering"
-      footer={renderFooter()}
+    show={show}
+    onClose={!isLoading && !showSuccessAnimation ? onClose : () => {}}
+    title="Rediger parkeringsoplysninger"
+    footer={showSuccessAnimation ? null : renderFooter()}
     >
-      {renderContent()}
+    {renderContent()}
     </Modal>
+ 
   );
 };
 

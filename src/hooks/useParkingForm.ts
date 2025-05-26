@@ -20,12 +20,12 @@ const EMPTY_PARKING: Parking = {
 };
 
 export function useParkingForm() {
-  const navigate = useNavigate();
   const [parking, setParking] = useState<Parking>({ ...EMPTY_PARKING });
   const [userId, setUserId] = useState<number | null>(null);
   const [areas, setAreas] = useState<Parea[]>([]);
   const [selectedArea, setSelectedArea] = useState<Parea | null>(null);
   const { daysError, isValid, validateParking } = usePAreaValidation(selectedArea);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
@@ -62,25 +62,30 @@ export function useParkingForm() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<boolean> => {
     e.preventDefault();
     
     const valid = validateParking(parking);
     
     if (!valid) {
       alert("Parkeringsperioden er ikke gyldig. " + (daysError || ""));
-      return;
+      return false;
     }
     
     try {
       const parkingToSubmit = { ...parking, userId: userId || 0 };
       await addParking(parkingToSubmit);
-      alert("Parkering oprettet!");
-      navigate("/home");
+      setParking({ ...EMPTY_PARKING });
+      return true; 
     } catch (error) {
       console.error("Fejl ved oprettelse:", error);
       alert("Kunne ikke oprette parkering.");
+      return false; 
     }
+  };
+
+  const navigateToMyParkings = () => {
+    navigate("/my-parkings");
   };
 
   return {
@@ -90,6 +95,7 @@ export function useParkingForm() {
     handleChange,
     handleSubmit,
     daysError,
-    isValid
+    isValid,
+    navigateToMyParkings
   };
 }

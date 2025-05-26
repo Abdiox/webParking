@@ -172,7 +172,6 @@
   opacity: 0.7;
 }
 
-/* Info messages */
 .info-message {
   color: #6c757d;
   font-size: 0.9rem;
@@ -260,7 +259,6 @@
   font-weight: 500;
 }
 
-/* Plate input container */
 .plate-input-container {
   position: relative;
   display: flex;
@@ -416,6 +414,49 @@
 input[type="datetime-local"] {
   font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
 }
+
+.success-animation-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.success-animation-container > div {
+  width: 300px;
+  height: 300px;
+}
+
+.success-message {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 20px;
+  color: #4caf50;
+}
+
+.blur-background {
+  filter: blur(5px);
+  transition: filter 0.3s ease;
+  pointer-events: none;
+}
+
+.form-submit-animation {
+  animation: submitPulse 0.5s ease;
+}
+
+@keyframes submitPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
 
 @media (max-width: 1024px) {
   .parking-form-container {

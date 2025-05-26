@@ -6,9 +6,7 @@ import Lottie from "lottie-react";
 import DeleteAnimation from "../components/animationer/DeleteAnimation.json";
 import "./ParkingDeleteModal.css"; 
 
-
-
-const CarsDeleteModal = ({ show, onClose, car }) => {
+const CarsDeleteModal = ({ show, onClose, car, onDelete }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
     const navigate = useNavigate();
@@ -18,20 +16,19 @@ const CarsDeleteModal = ({ show, onClose, car }) => {
         setIsLoading(true);
     
         try {
-        await deleteCar(car.id);
-        setShowSuccessAnimation(true);
-
-        setShowSuccessAnimation(true);
-        setTimeout(() => {
-            setShowSuccessAnimation(false);
-            onClose();
-            window.location.reload();
-        }, 3000);
-
+            await deleteCar(car.id);
+            setShowSuccessAnimation(true);
+            
+            setTimeout(() => {
+                setShowSuccessAnimation(false);
+                if (onDelete) {
+                    onDelete();
+                }
+            }, 3000);
         } catch (error) {
-        alert("Der skete en fejl: " + error);
-        } finally {
-        setIsLoading(false);
+            console.error("Error deleting car:", error);
+            alert("Der skete en fejl: " + error);
+            setIsLoading(false);
         }
     };
     
@@ -52,41 +49,47 @@ const CarsDeleteModal = ({ show, onClose, car }) => {
         return (
             <div className="delete-car-confirm">
                 <p>Er du sikker på, at du vil slette denne bil?</p>
-                <p>Registreringsnummer: <strong>{car?.plateNumber || car?.licensePlate}</strong></p>
+                <p>Registreringsnummer: <strong>{car?.registrationNumber}</strong></p>
                 <p>Dette kan ikke fortrydes.</p>
             </div>
         );
     };
+    
     const renderFooter = () => {
+        if (showSuccessAnimation) {
+            return null; // Don't show buttons during animation
+        }
+        
         return (
-        <>
-            <button 
-            onClick={handleDelete}
-            disabled={isLoading}
-            className="modal-button delete"
-            >
-            {isLoading ? "Arbejder..." : "Slet bil"}
-            </button>
-            <button 
-            onClick={onClose}
-            disabled={isLoading}
-            className="modal-button cancel"
-            >
-            Annuller
-            </button>
-        </>
+            <>
+                <button 
+                    onClick={handleDelete}
+                    disabled={isLoading}
+                    className="modal-button delete"
+                >
+                    {isLoading ? "Arbejder..." : "Slet bil"}
+                </button>
+                <button 
+                    onClick={onClose}
+                    disabled={isLoading}
+                    className="modal-button cancel"
+                >
+                    Annuller
+                </button>
+            </>
         );
     };
+    
     return (
         <Modal
-        show={show}
-        onClose={!isLoading && !showSuccessAnimation ? onClose : () => {}}
-        title={showSuccessAnimation ? "Bil slettet" : "Slet Bil"}
-        footer={renderFooter()}
-      >
-        {renderContent()}
-      </Modal>
-   
+            show={show}
+            onClose={!isLoading && !showSuccessAnimation ? onClose : () => {}}
+            title={showSuccessAnimation ? "Bil slettet" : "Slet Bil"}
+            footer={renderFooter()}
+        >
+            {renderContent()}
+        </Modal>
     );
 }
+
 export default CarsDeleteModal;

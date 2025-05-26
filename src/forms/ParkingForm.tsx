@@ -2,19 +2,29 @@ import React, { useState, useEffect } from "react";
 import type { Parking, Parea, Car } from "../services/apiFacade";
 import { useCarLookUp } from "../hooks/useCarLookUp";
 import { getCarsByUserId } from "../services/apiFacade";
+import Lottie from "lottie-react";
+import AddedAnimation from "../components/animationer/AddedAnimation.json";
 import "./RegistrationForm.css"; 
 
 interface RegistrationFormProps {
   parking: Parking;
   areas: Parea[];
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
-  onSubmit: (e: React.FormEvent) => void;
+  onSubmit: (e: React.FormEvent) => Promise<boolean>;
   userId: number; 
+  onCreateSuccess?: () => void;
 }
 
 type CarSelectionMode = "existing" | "new";
 
-export default function ParkingForm({ parking, areas, onChange, onSubmit, userId }: RegistrationFormProps) {
+export default function ParkingForm({ 
+  parking, 
+  areas, 
+  onChange, 
+  onSubmit, 
+  userId,
+  onCreateSuccess 
+}: RegistrationFormProps) {
   const now = new Date().toISOString().slice(0, 16);
   const { carDetails, isLoading, error, lookupCar, resetCarDetails } = useCarLookUp();
   const [selectedArea, setSelectedArea] = useState<Parea | null>(null);
@@ -23,7 +33,8 @@ export default function ParkingForm({ parking, areas, onChange, onSubmit, userId
   const [userCars, setUserCars] = useState<Car[]>([]);
   const [selectedCarId, setSelectedCarId] = useState<number | null>(null);
   const [loadingUserCars, setLoadingUserCars] = useState(false);
-
+  const [formAnimation, setFormAnimation] = useState(false);
+  const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
 
   useEffect(() => {
     const loadUserCars = async () => {
@@ -34,7 +45,6 @@ export default function ParkingForm({ parking, areas, onChange, onSubmit, userId
         const cars = await getCarsByUserId(userId);
         setUserCars(cars);
         
-        // If user has no cars, default to new car mode
         if (cars.length === 0) {
           setCarSelectionMode("new");
         }
@@ -149,9 +159,49 @@ export default function ParkingForm({ parking, areas, onChange, onSubmit, userId
     }
   };
   
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormAnimation(true);
+    
+    try {
+      const success = await onSubmit(e);
+      
+      if (success) {
+        setShowSuccessAnimation(true);
+        
+        setTimeout(() => setFormAnimation(false), 1000);
+        
+        setTimeout(() => {
+          setShowSuccessAnimation(false);
+          if (onCreateSuccess) {
+            onCreateSuccess();
+          }
+        }, 3000);
+      } else {
+        setTimeout(() => setFormAnimation(false), 1000);
+      }
+    } catch (err) {
+      setTimeout(() => setFormAnimation(false), 1000);
+    }
+  };
+  
   return (
     <div className="parking-form-container">
-      <form onSubmit={onSubmit} className="parking-form">
+      {showSuccessAnimation && (
+        <div className="success-animation-container">
+          <Lottie 
+            animationData={AddedAnimation} 
+            loop={false} 
+            autoplay={true}
+          />
+          <p className="success-message">Parkering oprettet!</p>
+        </div>
+      )}
+      
+      <form 
+        onSubmit={handleFormSubmit} 
+        className={`parking-form ${formAnimation ? "form-submit-animation" : ""} ${showSuccessAnimation ? "blur-background" : ""}`}
+      >
         <h2>Registrer Parkering</h2>
         
         <div className="form-group">
@@ -234,7 +284,6 @@ export default function ParkingForm({ parking, areas, onChange, onSubmit, userId
           </div>
         )}
         
-        {/* Car Details Display */}
         {selectedCarForDisplay && (
           <div className="car-details">
             <h3>Biloplysninger</h3>
