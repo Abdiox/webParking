@@ -9,12 +9,12 @@ interface RegistrationFormProps {
   areas: Parea[];
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   onSubmit: (e: React.FormEvent) => void;
-  userId: number; // Added to get user's cars
+  userId: number; 
 }
 
 type CarSelectionMode = "existing" | "new";
 
-export default function RegistrationForm({ parking, areas, onChange, onSubmit, userId }: RegistrationFormProps) {
+export default function ParkingForm({ parking, areas, onChange, onSubmit, userId }: RegistrationFormProps) {
   const now = new Date().toISOString().slice(0, 16);
   const { carDetails, isLoading, error, lookupCar, resetCarDetails } = useCarLookUp();
   const [selectedArea, setSelectedArea] = useState<Parea | null>(null);
@@ -24,7 +24,7 @@ export default function RegistrationForm({ parking, areas, onChange, onSubmit, u
   const [selectedCarId, setSelectedCarId] = useState<number | null>(null);
   const [loadingUserCars, setLoadingUserCars] = useState(false);
 
-  // Load user's existing cars
+
   useEffect(() => {
     const loadUserCars = async () => {
       if (!userId) return;
@@ -109,7 +109,7 @@ export default function RegistrationForm({ parking, areas, onChange, onSubmit, u
     
     const selectedCar = userCars.find(car => car.id === carId);
     if (selectedCar && selectedCar.registrationNumber) {
-      // Update the parking object with the selected car's plate number
+     
       const plateEvent = {
         target: { 
           name: "plateNumber", 
@@ -172,7 +172,6 @@ export default function RegistrationForm({ parking, areas, onChange, onSubmit, u
           </select>
         </div>
 
-        {/* Car Selection Mode Toggle */}
         <div className="form-group">
           <label>Vælg køretøj:</label>
           <div className="car-selection-toggle">
@@ -197,7 +196,6 @@ export default function RegistrationForm({ parking, areas, onChange, onSubmit, u
           )}
         </div>
 
-        {/* Existing Cars Selection */}
         {carSelectionMode === "existing" && userCars.length > 0 && (
           <div className="form-group">
             <label htmlFor="existingCar">Vælg fra dine biler:</label>
@@ -217,7 +215,6 @@ export default function RegistrationForm({ parking, areas, onChange, onSubmit, u
           </div>
         )}
 
-        {/* New Car Plate Number Input */}
         {carSelectionMode === "new" && (
           <div className="form-group">
             <label htmlFor="plateNumber">Nummerplade:</label>

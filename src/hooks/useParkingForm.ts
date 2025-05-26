@@ -86,7 +86,7 @@ export function useParkingForm() {
   return {
     parking,
     areas,
-    userId, // Added userId to return values
+    userId, 
     handleChange,
     handleSubmit,
     daysError,

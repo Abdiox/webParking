@@ -31,17 +31,26 @@ export default function Register() {
     e.preventDefault();
     try {
       await addUser(user);
-      alert("Bruger oprettet!");
-      navigate("/login");
+      return true; 
     } catch (error) {
       console.error("Fejl ved oprettelse:", error);
       alert("Kunne ikke oprette bruger.");
+      return false;
     }
+  };
+
+  const handleRegisterSuccess = () => {
+    navigate("/login");
   };
 
   return (
     <div>
-      <RegisterForm user={user} onChange={handleChange} onSubmit={handleSubmit} />
+      <RegisterForm 
+        user={user} 
+        onChange={handleChange} 
+        onSubmit={handleSubmit} 
+        onRegisterSuccess={handleRegisterSuccess}
+      />
     </div>
   );
 }

@@ -15,50 +15,53 @@ const Login: React.FC = () => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
-
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  try {
-    localStorage.removeItem("userId");
-    localStorage.removeItem("token");
-    localStorage.removeItem("email");
-    localStorage.removeItem("role");
-    
-    const res = await auth.signIn(credentials);
-    
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
-      const allUsers = await getUsers();
-      console.log("All users:", allUsers);
+      localStorage.removeItem("userId");
+      localStorage.removeItem("token");
+      localStorage.removeItem("email");
+      localStorage.removeItem("role");
       
-      const currentUser = allUsers.find(user => user.email === res.email);
+      const res = await auth.signIn(credentials);
       
-      if (currentUser) {
-        localStorage.setItem("userId", currentUser.id.toString());
-        console.log("User ID saved:", currentUser.id);
-        console.log("User role from backend:", currentUser.role);
+      try {
+        const allUsers = await getUsers();
+        console.log("All users:", allUsers);
         
-        localStorage.setItem("role", currentUser.role);
+        const currentUser = allUsers.find(user => user.email === res.email);
         
-        console.log("User data in localStorage:", {
-          userId: localStorage.getItem("userId"),
-          email: localStorage.getItem("email"),
-          token: localStorage.getItem("token") ? "exists" : "missing",
-          role: localStorage.getItem("role")
-        });
-      } else {
-        console.error("Could not find user with email:", res.email);
+        if (currentUser) {
+          localStorage.setItem("userId", currentUser.id.toString());
+          console.log("User ID saved:", currentUser.id);
+          console.log("User role from backend:", currentUser.role);
+          
+          localStorage.setItem("role", currentUser.role);
+          
+          console.log("User data in localStorage:", {
+            userId: localStorage.getItem("userId"),
+            email: localStorage.getItem("email"),
+            token: localStorage.getItem("token") ? "exists" : "missing",
+            role: localStorage.getItem("role")
+          });
+        } else {
+          console.error("Could not find user with email:", res.email);
+        }
+      } catch (userErr) {
+        console.error("Error fetching user ID:", userErr);
       }
-    } catch (userErr) {
-      console.error("Error fetching user ID:", userErr);
+      
+      return true;
+      
+    } catch (err: any) {
+      setError(err.message || "Login failed");
+      return false;
     }
-    
-    window.location.href = "/home";
-    
-  } catch (err: any) {
-    setError(err.message || "Login failed");
-  }
-};
+  };
 
+  const handleLoginSuccess = () => {
+    window.location.href = "/home";
+  };
 
   return (
     <div style={{ maxWidth: 400, margin: "auto" }}>
@@ -67,6 +70,7 @@ const handleSubmit = async (e: React.FormEvent) => {
         onChange={handleChange}
         onSubmit={handleSubmit}
         onRegisterClick={() => navigate("/register")}
+        onLoginSuccess={handleLoginSuccess}
         error={error}
       />
     </div>

@@ -6,12 +6,12 @@ export default function CreateParking() {
   const {
     parking,
     areas,
-    userId, // Added userId from the hook
+    userId, 
     handleChange,
     handleSubmit,
   } = useParkingForm();
 
-  // Don't render the form until we have a userId
+
   if (!userId) {
     return <div>Loading...</div>;
   }
@@ -21,7 +21,7 @@ export default function CreateParking() {
       <ParkingForm
         parking={parking}
         areas={areas}
-        userId={userId} // Pass userId as prop
+        userId={userId} 
         onChange={handleChange}
         onSubmit={handleSubmit}
       />

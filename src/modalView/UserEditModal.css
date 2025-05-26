@@ -150,7 +150,6 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Responsive design */
 @media (max-width: 640px) {
   .edit-user-form {
     grid-template-columns: 1fr;

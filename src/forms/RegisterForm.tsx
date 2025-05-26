@@ -1,21 +1,65 @@
-import React from "react";
+import React, { useState } from "react";
 import type { UserDetails } from "../services/apiFacade";
 import { useNavigate } from "react-router-dom";
 import "./RegisterForm.css";
 import { FaUser, FaEnvelope, FaLock, FaPhone, FaBuilding, FaHome, FaCity, FaMapMarkerAlt } from "react-icons/fa";
+import Lottie from "lottie-react";
+import CreateAnimation from "../components/animationer/CreateAnimation.json";
 
 interface RegisterFormProps {
   user: UserDetails;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onSubmit: (e: React.FormEvent) => void;
+  onSubmit: (e: React.FormEvent) => Promise<boolean>; 
+  onRegisterSuccess?: () => void; 
 }
 
-export default function RegisterForm({ user, onChange, onSubmit }: RegisterFormProps) {
+export default function RegisterForm({ user, onChange, onSubmit, onRegisterSuccess }: RegisterFormProps) {
   const navigate = useNavigate();
+  const [formAnimation, setFormAnimation] = useState(false);
+  const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormAnimation(true);
+    
+    try {
+      const success = await onSubmit(e);
+      
+      if (success) {
+        setShowSuccessAnimation(true);
+        
+        setTimeout(() => setFormAnimation(false), 1000);
+        
+        setTimeout(() => {
+          setShowSuccessAnimation(false);
+          if (onRegisterSuccess) {
+            onRegisterSuccess();
+          }
+        }, 3000);
+      } else {
+        setTimeout(() => setFormAnimation(false), 1000);
+      }
+    } catch (err) {
+      setTimeout(() => setFormAnimation(false), 1000);
+    }
+  };
 
   return (
     <div className="register-page">
-      <form onSubmit={onSubmit} className="register-form">
+      {showSuccessAnimation && (
+        <div className="success-animation-container">
+          <Lottie 
+            animationData={CreateAnimation} 
+            loop={false} 
+            autoplay={true}
+          />
+        </div>
+      )}
+      
+      <form 
+        onSubmit={handleSubmit}
+        className={`register-form ${formAnimation ? "form-submit-animation" : ""} ${showSuccessAnimation ? "blur-background" : ""}`}
+      >
         <h2>Registrér ny bruger</h2>
         
         <div className="form-grid">

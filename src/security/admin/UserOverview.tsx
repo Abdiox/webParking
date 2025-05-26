@@ -31,7 +31,7 @@ const UserOverview: React.FC = () => {
       <table className="user-table">
         <thead>
           <tr>
-            <th>Brugernavn</th>
+            <th>Lejemål</th>
             <th>Fornavn</th>
             <th>Efternavn</th>
             <th>Email</th>
