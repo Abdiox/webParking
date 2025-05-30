@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import type { UserDetails } from "../services/apiFacade";
+import Lottie from "lottie-react";
+import LoggedOut from "../components/animationer/LoggedOut.json"
 import "./NavBar.css";
 
 interface Props {
@@ -8,6 +10,8 @@ interface Props {
 }
 
 const NavBar: React.FC<Props> = ({user}) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
   const navigate = useNavigate();
   
 const isAdmin = () => {
@@ -27,7 +31,11 @@ const isUser = () => {
 
   const handleLogout = () => {
     localStorage.clear();
-    window.location.href = "/login";
+    setShowSuccessAnimation(true);
+    setTimeout(() => {
+      setShowSuccessAnimation(false);
+      navigate("/login");
+    }, 3000);
   };
 
   return (
@@ -146,17 +154,33 @@ const isUser = () => {
           )}
         </div>
 
+      <div className="logout-section">
+      {showSuccessAnimation && (
+  <div className="logout-animation">
+    <Lottie 
+      animationData={LoggedOut} 
+      loop={false} 
+      autoplay={true} 
+    />
+    <p>Du er logget ud!</p>
+  </div>
+)}
 
-        <div className="logout-container">
-          <button className="logout-btn" onClick={handleLogout}>
-            <span className="icon">🚪</span>
-            <span>Log ud</span>
+          <button 
+            className="logout-button" 
+            onClick={handleLogout}
+            disabled={isLoading}
+          >
+            {isLoading ? "Logger ud..." : "Log Ud"}
           </button>
+          
+
+    
+       
+
         </div>
       </div>
-
   );
 };
-
 
 export default NavBar;
