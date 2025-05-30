@@ -12,7 +12,7 @@ export const ParkingAreaList: React.FC = () => {
   if (error) return <div className="error-message">{error}</div>;
   
   return (
-    <div className="parking-container">
+    <div className="parking-container-area">
       <h1 className="parking-title">Parkering områder</h1>
       
       <div className="parking-stats">

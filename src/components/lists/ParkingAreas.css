@@ -1,4 +1,4 @@
-.parking-container {
+.parking-container-area {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2.5rem;
@@ -202,7 +202,7 @@
 }
 
 @media (max-width: 768px) {
-  .parking-container {
+  .parking-container-area {
     padding: 1.5rem;
     left: 0;
     width: 100%;
@@ -218,7 +218,7 @@
 }
 
 @media (max-width: 480px) {
-  .parking-container {
+  .parking-container-area {
     padding: 1rem;
   }
   
