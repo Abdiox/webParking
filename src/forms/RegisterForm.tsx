@@ -65,9 +65,20 @@ export default function RegisterForm({ user, onChange, onSubmit, onRegisterSucce
         <div className="form-grid">
           <div className="input-group">
             <input 
-              name="name" 
-              placeholder="Navn" 
-              value={user.name} 
+              name="firstName" 
+              placeholder="Fornavn" 
+              value={user.firstName} 
+              onChange={onChange} 
+              required 
+            />
+            <FaUser className="input-icon" />
+          </div>
+
+          <div className="input-group">
+            <input 
+              name="lastName" 
+              placeholder="Efternavn" 
+              value={user.lastName} 
               onChange={onChange} 
               required 
             />
