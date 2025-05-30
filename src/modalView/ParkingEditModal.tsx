@@ -1,3 +1,4 @@
+/*
 import React, { useState, useEffect } from "react";
 import Modal from "./Modal";
 import { editParking, getParea } from "../services/apiFacade";
@@ -269,3 +270,5 @@ const ParkingEditModal = ({ show, onClose, parking, actionType }) => {
 };
 
 export default ParkingEditModal;
+
+*/

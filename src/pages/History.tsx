@@ -31,7 +31,7 @@ export const History: React.FC = () => {
             ) : filteredParkings.length > 0 ? (
                 <ParkingHistory parkings={filteredParkings} />
             ) : (
-                <p>Ingen parkeringer fundet for {formatMonthYear(currentDate)}</p>
+                <p className="ingen-parkering">Ingen parkeringer fundet for {formatMonthYear(currentDate)}</p>
             )}
         </div>
     );
