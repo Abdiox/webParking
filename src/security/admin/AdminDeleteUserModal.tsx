@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import Modal from "../../modalView/Modal";
 import { deleteUser } from "../../services/apiFacade";
 import { useNavigate } from "react-router-dom";
-
+import Lottie from "lottie-react";
+import DeleteAnimation from "../../components/animationer/DeleteAnimation.json";
 
 const AdminDeleteUserModal = ({ show, onClose, user }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
   const navigate = useNavigate();
 
   const handleDelete = async () => {
@@ -14,9 +16,12 @@ const AdminDeleteUserModal = ({ show, onClose, user }) => {
 
     try {
       await deleteUser(user.id);
-      alert("Bruger slettet!");
-      onClose();
-      window.location.reload();
+      setShowSuccessAnimation(true);
+      setTimeout(() => {
+        setShowSuccessAnimation(false);
+        onClose();
+        window.location.reload();
+      }, 3000);
     } catch (error) {
       alert("Der skete en fejl: " + error);
     } finally {
@@ -25,12 +30,25 @@ const AdminDeleteUserModal = ({ show, onClose, user }) => {
   };
 
   const renderContent = () => {
-    console.log("Rendering modal content with user:", user);
+     if (showSuccessAnimation) {
+      return (
+      <div className="delete-animation-container">
+        <Lottie 
+          animationData={DeleteAnimation} 
+          loop={false} 
+          autoplay={true}
+        />
+        <p className="delete-success-message">Bruger slettet!</p>
+      </div>
+    );
+
+  }
+
     return (
       <div className="delete-user-confirm">
         <p>Er du sikker på, at du vil slette denne bruger?</p>
-        <p>Brugernavn: <strong>{user?.firstName || "Ingen bruger valgt"}</strong></p>
-        <p>User ID: <strong>{user?.id || "Ingen ID"}</strong></p>
+        <p>Navn: <strong>{user?.firstName} {user?.lastName}</strong></p>
+        <p>Email: <strong>{user?.email}</strong></p>
         <p>Dette kan ikke fortrydes.</p>
       </div>
     );
@@ -61,13 +79,13 @@ const AdminDeleteUserModal = ({ show, onClose, user }) => {
 
   return (
     <Modal
-    show={show}
-    onClose={!isLoading ? onClose : () => {}}
-    title="Slet Bruger"
-    footer={renderFooter()}
-  >
-    {renderContent()}
-  </Modal>
+      show={show}
+      onClose={!isLoading && !showSuccessAnimation ? onClose : () => {}}
+      title={showSuccessAnimation ? "Bruger slettet" : "Slet Bruger"}
+      footer={renderFooter()}
+    >
+      {renderContent()}
+    </Modal>
   );
 
 }
