@@ -1,46 +1,44 @@
-import React, { useEffect, useState } from "react";
-import "./ExpirationWarning.css";
+import React from 'react';
+import './ExpirationWarning.css';
 
 interface ExpirationWarningProps {
   endTime: string;
 }
 
 const ExpirationWarning: React.FC<ExpirationWarningProps> = ({ endTime }) => {
-  const [timeLeft, setTimeLeft] = useState<number>(new Date(endTime).getTime() - Date.now());
+  const getTimeRemaining = () => {
+    const now = new Date();
+    const expirationDate = new Date(endTime);
+    const diffMs = expirationDate.getTime() - now.getTime();
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeLeft(new Date(endTime).getTime() - Date.now());
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [endTime]);
+    if (diffMs <= 0) return { hours: 0, minutes: 0, seconds: 0 };
 
-  if (timeLeft <= 0) return null;
+    const totalSeconds = Math.floor(diffMs / 1000);
+    const days = Math.floor(totalSeconds / (60 * 60 * 24));
+    const hours = Math.floor((totalSeconds % (60 * 60 * 24)) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
 
-  const totalSeconds = Math.floor(timeLeft / 1000);
-  const days = Math.floor(totalSeconds / (3600 * 24));
-  const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
+    return { totalHours: totalSeconds / 3600, days, hours, minutes, seconds };
+  };
 
-  const isCritical = timeLeft < 1000 * 60 * 60 * 6;   
-  const isWarning = timeLeft < 1000 * 60 * 60 * 24;   
+  const { totalHours, days, hours, minutes, seconds } = getTimeRemaining();
 
-  const className = isCritical
-    ? "expiration-warning critical"
-    : isWarning
-    ? "expiration-warning warning"
-    : "expiration-warning";
+  let level: 'critical' | 'warning' | null = null;
+  if (totalHours <= 5) level = 'critical';
+  else if (totalHours <= 24) level = 'warning';
+
+  if (!level) return null;
 
   return (
-    <div className={className}>
-      <div className="expiration-icon">{isCritical ? "⏰" : "⚠️"}</div>
+    <div className={`expiration-warning ${level}`}>
+      <div className="expiration-icon">{level === 'critical' ? '⏰' : '⚠️'}</div>
       <div className="expiration-message">
         <span className="highlight">
-          {isCritical ? "HASTER!" : "Udløber snart!"}
+          {level === 'critical' ? 'HASTER!' : 'Udløber snart!'}
         </span>
         <span className="time-remaining">
-          {days > 0 ? `${days}d ` : ""}
+          {days > 0 ? `${days}d ` : ''}
           {hours}t {minutes}m {seconds}s
         </span>
       </div>
