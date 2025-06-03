@@ -21,7 +21,7 @@ export default function HomeText() {
         <div className="home-greeting">
           <div className="greeting-icon">🚗</div>
           <h1>Velkommen tilbage!</h1>
-          <p className="home-sub">Hold styr på dine parkeringer nemt og hurtigt.</p>
+          <p className="home-sub">Parkér på sekunder</p>
           
           <div className="quick-stats">
             <div className="stat-card">

@@ -60,7 +60,13 @@ const Login: React.FC = () => {
   };
 
   const handleLoginSuccess = () => {
-    window.location.href = "/home";
+    const userRole = localStorage.getItem("role");
+
+    if (userRole === "ADMIN") {
+      navigate("/admin");
+    } else {
+      navigate("/home");
+    }
   };
 
   return (
