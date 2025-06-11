@@ -65,39 +65,44 @@ export interface Car {
 
   /* USERS */
 
-async function getUsers(): Promise<Array<UserDetails>> {
-  if (users.length > 0) return [...users];
-  try {
-      const res = await fetch(USERS_URL);
-      if (!res.ok) {
-          throw new Error("Failed to fetch users");
-      }
-      const data: Array<UserDetails> = await res.json();
-      users = data;
-      return [...users];
-  } catch (error) {
-      console.error(error);
-      return [];
+  async function getUsers(): Promise<Array<UserDetails>> {
+    if (users.length > 0) return [...users];
+    try {
+        const options = makeOptions("GET", null, true); 
+        const res = await fetch(USERS_URL, options);
+        if (!res.ok) {
+            throw new Error("Failed to fetch users");
+        }
+        const data: Array<UserDetails> = await res.json();
+        users = data;
+        return [...users];
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
   }
-}
 
-async function addUser(user: UserDetails): Promise<UserDetails> {
-  const options = makeOptions("POST", user);
-  return fetch(USERS_URL + "/add", options).then(handleHttpErrors);
-}
+  async function addUser(user: UserDetails): Promise<UserDetails> {
+    const options = makeOptions("POST", user, false); // Ingen token til registration
+    return fetch(USERS_URL + "/add", options).then(handleHttpErrors);
+  }
+
+
 
 async function getUser(id: number): Promise<UserDetails> {
-  return fetch(USERS_URL + "/" + id)
-  .then(handleHttpErrors)
+  const options = makeOptions("GET", null, true);
+  return fetch(USERS_URL + "/" + id, options).then(handleHttpErrors);
 }
+
+
 async function editUser(user: UserDetails): Promise<UserDetails> {
-  const options = makeOptions("PUT", user);
+  const options = makeOptions("PUT", user, true);
   return fetch(USERS_URL + "/update/" + user.id, options).then(handleHttpErrors);
 }
 
 async function deleteUser(id: number): Promise<void> {
   console.log("Deleting user with ID:", id);
-  const options = makeOptions("DELETE", null);
+  const options = makeOptions("DELETE", null, true);
   
   const response = await fetch(USERS_URL + "/delete/" + id, options);
 
@@ -117,42 +122,55 @@ async function deleteUser(id: number): Promise<void> {
 
 
   async function getParkings(): Promise<Array<Parking>> {
+    if (parking.length > 0) return [...parking];
     try {
-      const res = await fetch(PARKING_URL);
-      const data = await res.json();
-      console.log("API response:", data);
-      return data;
+        const options = makeOptions("GET", null, true); 
+        const res = await fetch(PARKING_URL, options);
+        if (!res.ok) {
+            throw new Error("Failed to fetch parkings");
+        }
+        const data: Array<Parking> = await res.json();
+        parking = data;
+        return [...parking];
     } catch (error) {
-      console.error(error);
-      return [];
+        console.error(error);
+        return [];
     }
   }
+
+  async function getActiveParkings(userId: number): Promise<Array<Parking>> {
+    const options = makeOptions("GET", null, true);
+    return fetch(PARKING_URL + "/active/user/" + userId, options).then(handleHttpErrors);
+}
   
 
   async function getParking(id: number): Promise<Parking>{
-    return fetch(PARKING_URL + "/" + id)
-    .then(handleHttpErrors)
-}
+    const options = makeOptions("GET", null, true);
+    return fetch(PARKING_URL + "/" + id, options).then(handleHttpErrors);
+  }
+  
 
- async function addParking(parking: Parking): Promise<Parking> {
-  const options = makeOptions("POST", parking);
-  return fetch(PARKING_URL + "/add", options).then(handleHttpErrors);
-}
+  async function addParking(parking: Parking): Promise<Parking> {
+    const options = makeOptions("POST", parking, true);
+    return fetch(PARKING_URL + "/add", options).then(handleHttpErrors);
+  }
+
 
 export async function getUserParkings(userId: number): Promise<Array<Parking>> {
-  return fetch(PARKING_URL + "/user/" + userId).then(handleHttpErrors);
+  const options = makeOptions("GET", null, true);
+  return fetch(PARKING_URL + "/user/" + userId, options).then(handleHttpErrors);
 }
 
 async function editParking(parking: Parking): Promise<Parking> {
-  const options = makeOptions("PUT", parking);
+  const options = makeOptions("PUT", parking, true);
   return fetch(PARKING_URL + "/" + parking.id, options).then(handleHttpErrors);
 }
 
 async function deleteParking(id: number): Promise<void> {
   console.log("Deleting parking with ID:", id);
-  const options = makeOptions("DELETE", null);
+  const options = makeOptions("DELETE", null, true);
   
-  const response = await fetch(PARKING_URL + "/" + id, options);
+  const response = await fetch(PARKING_URL + "/delete/" + id, options);
    console.log("Response from deleteParking:", response);
    
   if (!response.ok) {
@@ -164,37 +182,44 @@ async function deleteParking(id: number): Promise<void> {
       /** P-Area **/
 
 
-async function getParea(): Promise<Array<Parea>> {
-    try {
-      const res = await fetch(PAREA_URL);
-      const data = await res.json();
-      console.log("API response:", data);
-      return data;
-    } catch (error) {
-      console.error(error);
-      return [];
-    }
-  }
+      async function getParea(): Promise<Array<Parea>> {
+        if (parea.length > 0) return [...parea];
+        try {
+            const options = makeOptions("GET", null, true); 
+            const res = await fetch(PAREA_URL, options);
+            if (!res.ok) {
+                throw new Error("Failed to fetch Parea");
+            }
+            const data: Array<Parea> = await res.json();
+            parea = data;
+            return [...parea];
+        } catch (error) {
+            console.error(error);
+            return [];
+        }
+      
+       
+      }
 
-async function getPareaById(id: number): Promise<Parea> {
-    return fetch(PAREA_URL + "/" + id)
-    .then(handleHttpErrors)
-
-}
+      async function getPareaById(id: number): Promise<Parea> {
+        const options = makeOptions("GET", null, true);
+        return fetch(PAREA_URL + "/" + id, options).then(handleHttpErrors);
+      }
 
 async function addParea(parea: Parea): Promise<Parea> {
-    const options = makeOptions("POST", parea);
+    const options = makeOptions("POST", parea, true);
     return fetch(PAREA_URL + "/add", options).then(handleHttpErrors);
+
 }
 
 async function editParea(parea: Parea): Promise<Parea> {
-    const options = makeOptions("PUT", parea);
+    const options = makeOptions("PUT", parea, true);
     return fetch(PAREA_URL + "/" + parea.id, options).then(handleHttpErrors);
 }
 
 async function deleteParea(id: number): Promise<void> {
     console.log("Deleting Parea with ID:", id);
-    const options = makeOptions("DELETE", null);
+    const options = makeOptions("DELETE", null, true);
     
     const response = await fetch(PAREA_URL + "/" + id, options);
      console.log("Response from deleteParea:", response);
@@ -204,47 +229,56 @@ async function deleteParea(id: number): Promise<void> {
     }
   }
 
+  
+
 
         /** Cars **/
         
 async function getCars(): Promise<Array<Car>> {
+    if (cars.length > 0) return [...cars];
     try {
-      const res = await fetch(CARS_URL);
-      const data = await res.json();
-      console.log("API response:", data);
-      return data;
+        const options = makeOptions("GET", null, true); 
+        const res = await fetch(CARS_URL, options);
+        if (!res.ok) {
+            throw new Error("Failed to fetch cars");
+        }
+        const data: Array<Car> = await res.json();
+        cars = data;
+        return [...cars];
     } catch (error) {
-      console.error(error);
-      return [];
+        console.error(error);
+        return [];
     }
+    
   }
 
 async function getCar(id: number): Promise<Car> {
-    return fetch(CARS_URL + "/" + id)
-    .then(handleHttpErrors)
+  const options = makeOptions("GET", null, true);
+  return fetch(CARS_URL + "/" + id, options).then(handleHttpErrors);
 
 }
 
 
 
 async function getCarsByUserId(userId: number): Promise<Car[]> {
-  return fetch(CARS_URL + "/user/" + userId)
-  .then(handleHttpErrors)
+    const options = makeOptions("GET", null, true);
+    return fetch(CARS_URL + "/user/" + userId, options).then(handleHttpErrors);
+  
 }
 
 async function addCar(car: Car): Promise<Car> {
-    const options = makeOptions("POST", car);
+    const options = makeOptions("POST", car, true);
     return fetch(CARS_URL + "/add", options).then(handleHttpErrors);
 }
 
 async function editCar(car: Car): Promise<Car> {
-    const options = makeOptions("PUT", car);
+    const options = makeOptions("PUT", car, true);
     return fetch(CARS_URL + "/" + car.id, options).then(handleHttpErrors);
 }
 
 async function deleteCar(id: number): Promise<void> {
     console.log("Deleting Car with ID:", id);
-    const options = makeOptions("DELETE", null);
+    const options = makeOptions("DELETE", null, true);
     
     const response = await fetch(CARS_URL + "/" + id, options);
      console.log("Response from deleteCar:", response);
@@ -266,4 +300,4 @@ async function deleteCar(id: number): Promise<void> {
 }
 
   
-export { getUsers, getUser, addUser, editUser, deleteUser, getParkings, getParking, editParking, deleteParking, addParking, getParea, getPareaById, addParea, editParea, deleteParea, getCars, getCar, getCarsByUserId, addCar, editCar, deleteCar };
+export { getUsers, getUser, addUser, editUser, deleteUser, getParkings, getActiveParkings, getParking, editParking, deleteParking, addParking, getParea, getPareaById, addParea, editParea, deleteParea, getCars, getCar, getCarsByUserId, addCar, editCar, deleteCar };

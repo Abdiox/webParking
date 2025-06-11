@@ -1,11 +1,4 @@
-import { Link } from "react-router-dom";
-/**
- * Utility Method to create options for a fetch call
- * @param method GET, POST, PUT, DELETE
- * @param body  The request body (only relevant for POST and PUT)
- * @returns
- */
-export function makeOptions(method: string, body: object | null, addToken?: boolean): RequestInit {
+export function makeOptions(method: string, body: object | null, addToken: boolean = true): RequestInit {
   const opts: RequestInit = {
     method: method,
     headers: {
@@ -13,15 +6,20 @@ export function makeOptions(method: string, body: object | null, addToken?: bool
       Accept: "application/json",
     },
   };
+  
   if (body) {
     opts.body = JSON.stringify(body);
   }
+  
   if (addToken) {
-    //@ts-ignore
-    opts.headers["Authorization"] = `Bearer ${localStorage.getItem("token")}`;
+    const token = localStorage.getItem("token");
+    if (token) {
+      //@ts-ignore
+      opts.headers["Authorization"] = `Bearer ${token}`;
+    }
   }
+  
   console.log("opts", opts, "body", body);
-
   return opts;
 }
 
@@ -31,6 +29,15 @@ export function makeOptions(method: string, body: object | null, addToken?: bool
  */
 export async function handleHttpErrors(res: Response) {
   if (!res.ok) {
+    if (res.status === 401) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("email");
+      localStorage.removeItem("role");
+      localStorage.removeItem("userId");
+      window.location.href = "/login";
+      throw new Error("Session expired. Please login again.");
+    }
+    
     const errorResponse = await res.json();
     const msg = errorResponse.message ? errorResponse.message : "No details provided";
     throw new Error(msg);
