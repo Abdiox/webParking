@@ -63,7 +63,7 @@ const Login: React.FC = () => {
     const userRole = localStorage.getItem("role");
 
     if (userRole === "ADMIN") {
-      navigate("/admin");
+      navigate("/admin/users");
     } else {
       navigate("/home");
     }
