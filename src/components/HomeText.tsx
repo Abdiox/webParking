@@ -1,13 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import type { Parking } from "../services/apiFacade";
-import type { UserDetails } from "../services/apiFacade";
 import { getActiveParkings } from "../services/apiFacade";
 import UserParkingList from "./lists/UserParkingList";
 import "./HomeText.css";
 
-interface Props {
-  user: UserDetails;
-}
 
 export default function HomeText() {
   const [parkings, setParkings] = useState<Parking[]>([]);

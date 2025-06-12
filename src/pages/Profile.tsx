@@ -1,10 +1,8 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
 import UserProfileDetails from "../components/UserProfileDetails";
 
 const Profile: React.FC = () => {
-  const navigate = useNavigate();
   const { user, loading, error } = useUser();
 
   if (loading) return <p>Indlæser profil …</p>;

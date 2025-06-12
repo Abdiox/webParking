@@ -1,14 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Modal from "../../modalView/Modal";
 import { deleteUser } from "../../services/apiFacade";
-import { useNavigate } from "react-router-dom";
 import Lottie from "lottie-react";
 import DeleteAnimation from "../../components/animationer/DeleteAnimation.json";
 
 const AdminDeleteUserModal = ({ show, onClose, user }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
-  const navigate = useNavigate();
 
   const handleDelete = async () => {
     if (!user) return;

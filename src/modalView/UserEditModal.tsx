@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Modal from "./Modal";
 import { editUser } from "../services/apiFacade";
 import { useNavigate } from "react-router-dom";
@@ -20,7 +20,6 @@ const UserEditModal = ({ show, onClose, user }) => {
         zipCode: ""
     });
     
-    const navigate = useNavigate();
     
     useEffect(() => {
         if (user) {

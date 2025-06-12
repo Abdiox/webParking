@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { useUsers } from "../../hooks/useUsers"
 import type { UserDetails } from "../../services/apiFacade";
 import AdminDeleteUserModal from "./AdminDeleteUserModal";
@@ -8,7 +7,6 @@ import SortComponent from "../../components/partials/SortComponent";
 import "./UsersOverview.css"; 
 
 const UserOverview: React.FC = () => {
-  const navigate = useNavigate();
   const { users, loading, error } = useUsers();
   const [selectedUser, setSelectedUser] = React.useState<UserDetails | null>(null);
   const [showDeleteModal, setShowDeleteModal] = React.useState(false);

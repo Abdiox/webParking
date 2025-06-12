@@ -10,7 +10,7 @@ interface Props {
 }
 
 const NavBar: React.FC<Props> = ({user}) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
   const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
   const navigate = useNavigate();
   

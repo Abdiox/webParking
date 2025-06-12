@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useCars } from "../../hooks/useCars";
 import CarForm from "../../forms/CarForm";
 import CarsDeleteModal from "../../modalView/CarsDeleteModal";

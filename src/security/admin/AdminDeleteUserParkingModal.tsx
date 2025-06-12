@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Modal from "../../modalView/modal";
 import { deleteParking } from "../../services/apiFacade";
-import { useNavigate } from "react-router-dom";
 import Lottie from "lottie-react";
 import DeleteAnimation from "../../components/animationer/DeleteAnimation.json";
 
@@ -9,7 +8,6 @@ import DeleteAnimation from "../../components/animationer/DeleteAnimation.json";
 const AdminDeleteUserParkingModal = ({ show, onClose, parking }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
-  const navigate = useNavigate();
 
   const handleDelete = async () => {
     if (!parking) return;

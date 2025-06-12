@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { useAllParkings } from "../../hooks/useAllParkings";
 import type { Parking } from "../../services/apiFacade";
 import AdminDeleteUserParkingModal from "./AdminDeleteUserParkingModal";
@@ -8,7 +7,6 @@ import "./AdminParkingOverview.css";
 
 
 const AdminParkingOverview: React.FC = () => {
-    const navigate = useNavigate();
     const { parkings, loading, error } = useAllParkings();
     const [selectedParking, setSelectedParking] =React.useState<Parking | null>(null);
     const [showDeleteModal, setShowDeleteModal] = React.useState(false);

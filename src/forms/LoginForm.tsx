@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import type { LoginRequest } from "../services/authFacade";
 import "./LoginForm.css";
 import { FaUser, FaLock, FaExclamationCircle } from "react-icons/fa";
