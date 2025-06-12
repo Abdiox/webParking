@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import type { Parking } from "../services/apiFacade";
 import type { UserDetails } from "../services/apiFacade";
+import { getActiveParkings } from "../services/apiFacade";
 import UserParkingList from "./lists/UserParkingList";
-import { useUserParkings } from "../hooks/useUserParkings";
 import "./HomeText.css";
 
 interface Props {
@@ -10,10 +10,36 @@ interface Props {
 }
 
 export default function HomeText() {
-  const { parkings, loading, error } = useUserParkings();
+  const [parkings, setParkings] = useState<Parking[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const now = new Date();
 
-  const activeParkings = parkings.filter(p => new Date(p.endTime) > now);
+  useEffect(() => {
+    const fetchActiveParkings = async () => {
+      try {
+        const userId = localStorage.getItem("userId");
+        
+        if (!userId) {
+          throw new Error("Bruger ID ikke fundet. Log venligst ind igen.");
+        }
+
+        const userIdNum = Number(userId);
+        const activeParkings = await getActiveParkings(userIdNum);
+        setParkings(activeParkings || []);
+      } catch (err: any) {
+        setError(err.message || "Kunne ikke hente parkeringer");
+        setParkings([]); 
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchActiveParkings();
+  }, []);
+
+  const safeParkings = Array.isArray(parkings) ? parkings : [];
+  const activeParkings = safeParkings.filter(p => new Date(p.endTime) > now);
 
   return (
     <div className="home-wrapper">
@@ -29,7 +55,7 @@ export default function HomeText() {
               <div className="stat-label">Aktive parkeringer</div>
             </div>
             <div className="stat-card">
-              <div className="stat-value">{parkings.length - activeParkings.length}</div>
+              <div className="stat-value">{safeParkings.length - activeParkings.length}</div>
               <div className="stat-label">Tidligere parkeringer</div>
             </div>
           </div>
@@ -52,7 +78,7 @@ export default function HomeText() {
           </div>
         )}
         
-        {error && (
+        {!loading && error && (
           <div className="status-message error">
             <div className="message-icon">❌</div>
             <div className="message-content">
@@ -62,7 +88,7 @@ export default function HomeText() {
           </div>
         )}
 
-        {!loading && activeParkings.length === 0 && (
+        {!loading && !error && activeParkings.length === 0 && (
           <div className="status-message empty">
             <div className="message-icon">🚙</div>
             <div className="message-content">
@@ -75,7 +101,7 @@ export default function HomeText() {
           </div>
         )}
 
-        {!loading && activeParkings.length > 0 && (
+        {!loading && !error && activeParkings.length > 0 && (
           <div className="parking-list-container">
             <UserParkingList parkings={activeParkings} loading={false} error={null} />
           </div>

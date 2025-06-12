@@ -137,7 +137,7 @@ export default function RegisterForm({ user, onChange, onSubmit, onRegisterSucce
             <input 
               name="adress" 
               placeholder="Adresse" 
-              value={user.adress} 
+              value={user.addess} 
               onChange={onChange} 
               required 
             />
