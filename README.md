@@ -24,6 +24,11 @@ If the backend is no longer running as PaaS, you will need to set it up yourself
 Backend repo: https://github.com/MadsFolkmann/BackendAMParking2
 
 
+This is the hosted frontend version through GitHub Pages:
+https://abdiox.github.io/webParking/
+
+
+
 ### Backend Build Status (main branch)
 
 [![Backend Build Status](https://github.com/MadsFolkmann/BackendAMParking2/actions/workflows/main_amparking.yml/badge.svg?branch=main)](https://github.com/MadsFolkmann/BackendAMParking2/actions/workflows/main_amparking.yml)
