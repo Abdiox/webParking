@@ -28,10 +28,12 @@ This is the hosted frontend version through GitHub Pages:
 https://abdiox.github.io/webParking/
 
 
-
 ### Backend Build Status (main branch)
 
 [![Backend Build Status](https://github.com/MadsFolkmann/BackendAMParking2/actions/workflows/main_amparking.yml/badge.svg?branch=main)](https://github.com/MadsFolkmann/BackendAMParking2/actions/workflows/main_amparking.yml)
 
 ### If you are more interested in the app-based solution, you can find the repository here:
 https://github.com/Abdiox/ParkingApp
+
+Security is inspired by https://github.com/lmor-spring2024/recipes-start
+
