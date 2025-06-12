@@ -173,11 +173,6 @@ const isUser = () => {
           >
             {isLoading ? "Logger ud..." : "Log Ud"}
           </button>
-          
-
-    
-       
-
         </div>
       </div>
   );

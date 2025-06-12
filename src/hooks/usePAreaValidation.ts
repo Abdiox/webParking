@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import type { Parking, Parea} from "../services/apiFacade";
 
 export function usePAreaValidation(selectedArea: Parea | null) {

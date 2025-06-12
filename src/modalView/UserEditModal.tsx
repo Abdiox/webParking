@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import Modal from "./Modal";
 import { editUser } from "../services/apiFacade";
-import { useNavigate } from "react-router-dom";
 import Lottie from "lottie-react";
 import EditAnimation from "../components/animationer/EditAnimation.json";
 

@@ -3,7 +3,6 @@ import Layout from "./components/partials/Layout";
 
 /**  User views **/
 
-
 import Home from "./pages/Home";
 import Login from "./security/Login";
 import Register from "./security/Register";

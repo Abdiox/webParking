@@ -226,8 +226,6 @@ async function deleteParea(id: number): Promise<void> {
     }
   }
 
-  
-
 
         /** Cars **/
         
