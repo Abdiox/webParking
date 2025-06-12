@@ -1,6 +1,7 @@
 {
   "name": "webparking",
   "private": true,
+  "homepage": "https://abdiox.github.io/webParking",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -8,8 +9,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-     "predeploy": "npm run build",
-  "deploy": "gh-pages -d dist"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist --clean"
   },
   "dependencies": {
     "axios": "^1.9.0",
