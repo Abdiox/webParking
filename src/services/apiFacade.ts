@@ -83,7 +83,7 @@ export interface Car {
   }
 
   async function addUser(user: UserDetails): Promise<UserDetails> {
-    const options = makeOptions("POST", user, false); // Ingen token til registration
+    const options = makeOptions("POST", user, false); 
     return fetch(USERS_URL + "/add", options).then(handleHttpErrors);
   }
 
@@ -166,14 +166,15 @@ async function deleteParking(id: number): Promise<void> {
   console.log("Deleting parking with ID:", id);
   const options = makeOptions("DELETE", null, true);
   
-  const response = await fetch(PARKING_URL + "/delete/" + id, options);
-   console.log("Response from deleteParking:", response);
+  const response = await fetch(PARKING_URL + "/" + id, options);
+  console.log("Response from deleteParking:", response);
    
   if (!response.ok) {
-    throw new Error(`Failed to delete parking with status: ${response.status}`);
+    const errorText = await response.text();
+    console.log("Error response body:", errorText);
+    throw new Error(`Failed to delete parking with status: ${response.status}. Error: ${errorText}`);
   }
 }
-  
 
       /** P-Area **/
 

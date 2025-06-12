@@ -5,14 +5,15 @@ import RegisterForm from "../forms/RegisterForm";
 
 const EMPTY_USER: UserDetails = {
   id: null,
-  name: "",
   email: "",
   password: "",
   phoneNumber: 0,
   rentalUnit: 0,
-  adress: "",
+  address: "",
   city: "",
   zipCode: 0,
+  firstName: "", 
+  lastName: "",  
 };
 
 export default function Register() {
@@ -23,7 +24,9 @@ export default function Register() {
     const { name, value } = e.target;
     setUser({
       ...user,
-      [name]: ["phoneNumber", "zipCode", "rentalUnit"].includes(name) ? Number(value) : value,
+      [name]: ["phoneNumber", "zipCode", "rentalUnit"].includes(name) 
+        ? (value === "" ? 0 : Number(value)) 
+        : value,
     });
   };
 
