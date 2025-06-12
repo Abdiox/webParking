@@ -36,13 +36,11 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const response = await authProvider.signIn(credentials);
       
-      // Store token and user data from response
       localStorage.setItem("token", response.token);
       localStorage.setItem("email", response.user.email);
       localStorage.setItem("userId", response.user.id.toString());
       localStorage.setItem("role", response.user.role);
       
-      // Update state
       setEmail(response.user.email);
       setUserId(response.user.id.toString());
       setUserRole(response.user.role);
@@ -61,12 +59,10 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
   };
   
   const signOut = () => {
-    // Clear state
     setEmail(null);
     setUserId(null);
     setUserRole(null);
     
-    // Clear localStorage
     localStorage.removeItem("token");
     localStorage.removeItem("email");
     localStorage.removeItem("role");
